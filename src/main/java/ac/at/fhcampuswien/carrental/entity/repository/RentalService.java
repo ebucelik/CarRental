@@ -1,7 +1,7 @@
-package ac.at.fhcampuswien.carrental.services;
+package ac.at.fhcampuswien.carrental.entity.repository;
 
-import ac.at.fhcampuswien.carrental.models.Car;
-import ac.at.fhcampuswien.carrental.models.Rental;
+import ac.at.fhcampuswien.carrental.rest.models.Car;
+import ac.at.fhcampuswien.carrental.rest.models.Rental;
 import java.util.List;
 
 public interface RentalService {

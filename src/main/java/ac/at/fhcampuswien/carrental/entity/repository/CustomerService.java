@@ -1,6 +1,6 @@
-package ac.at.fhcampuswien.carrental.services;
+package ac.at.fhcampuswien.carrental.entity.repository;
 
-import ac.at.fhcampuswien.carrental.models.Customer;
+import ac.at.fhcampuswien.carrental.rest.models.Customer;
 
 public interface CustomerService {
     Customer register(Customer customer);

@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.carrental.services;
+package ac.at.fhcampuswien.carrental.entity.repository;
 
 import java.util.List;
 

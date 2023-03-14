@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.carrental.models;
+package ac.at.fhcampuswien.carrental.rest.models;
 
 import jakarta.persistence.*;
 
