@@ -1,4 +1,4 @@
 package ac.at.fhcampuswien.carrental.entity.service;
 
-public class CarService {
+public class CustomerEntityService {
 }

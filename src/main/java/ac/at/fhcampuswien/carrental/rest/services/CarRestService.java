@@ -1,4 +1,4 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
-public class CarService {
+public class CarRestService {
 }
