@@ -29,8 +29,7 @@ public class Customer {
     private String dateOfBirth;
     private float customerChosenCurrency;
 
-    public Customer(Long id, String eMail, String firstName, String lastName, String password, String phoneNumber, String dateOfBirth) {
-        this.id = id;
+    public Customer(String eMail, String firstName, String lastName, String password, String phoneNumber, String dateOfBirth) {
         this.eMail = eMail;
         this.firstName = firstName;
         this.lastName = lastName;

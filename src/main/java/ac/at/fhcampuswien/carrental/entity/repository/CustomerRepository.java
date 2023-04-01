@@ -11,6 +11,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     boolean existsByeMail(String eMail);*/
 
+    boolean existsByeMail(String email);
 
 }
 

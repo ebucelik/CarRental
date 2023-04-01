@@ -18,17 +18,4 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RentalEntityService{
 
-    RentalRepository myRepo;
-
-    Date x = new Date(2023,01,01);
-    Date x2 = new Date(2023,01,15);
-
-    public void runneri() {
-
-        List<Long> myList = myRepo.findAllAvailableCarsBetweenDates(x, x2);
-
-        for(long x : myList){
-            System.out.println(x);
-        }
-    }
 }

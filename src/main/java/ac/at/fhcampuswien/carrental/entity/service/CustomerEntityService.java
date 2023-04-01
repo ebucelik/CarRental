@@ -18,4 +18,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerEntityService {
+
+
+    CustomerRepository customerRepository;
+
+    UserMapper userMapper;
+
+    public boolean checkCustomerExistance(String email) {
+        return customerRepository.existsByeMail(email);
+
+    }
+
+    public RegistrationResponseDto addCustomer(RegistrationRequestDto customerDto) throws CustomerAlreadyExistsException {
+        if (checkCustomerExistance(customerDto.getEMail())) {
+            throw new CustomerAlreadyExistsException();
+        }
+        Customer customer = userMapper.requestMapping(customerDto);
+        Customer dbResponse = customerRepository.save(customer);
+        return userMapper.responseMapping(dbResponse);
+    }
+
 }
