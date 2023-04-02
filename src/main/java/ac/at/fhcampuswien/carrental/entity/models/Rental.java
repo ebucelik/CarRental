@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -21,8 +22,8 @@ public class Rental {
     private Long id;
     private Long customerId;
     private Long carId;
-    private Date startDay;
-    private Date endDay;
+    private LocalDate startDay;
+    private LocalDate endDay;
     private float totalCost;
 }
 
