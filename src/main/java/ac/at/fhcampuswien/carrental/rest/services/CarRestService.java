@@ -20,9 +20,38 @@ public class CarRestService {
 
     @NonNull
     CarEntityService carEntityService;
+    @NonNull
 
 
-    public List<Car> getAvailableCars(LocalDate from, LocalDate to){
+
+    public List<Car> getAvailableCars(String token, LocalDate from, LocalDate to){
+       // refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
         return carEntityService.getFreeCarsBetweenDates(from, to);
     }
 }
+
+
+
+
+
+/*
+@Override
+    @Transactional
+    public void changePassword(ChangePasswordDTO passwordDTO) {
+        if (!passwordDTO.newPassword().equals(passwordDTO.verifiedPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password mismatch");
+        }
+        UserEntity user = getUserEntity(getUserName());
+        validatePassword(passwordDTO.currentPassword(), user.getPassword());
+
+        user.setPassword(passwordEncoderMapper.encodePlainText(passwordDTO.newPassword()));
+    }
+
+    @Override
+    public AuthenticationDTO refreshAccessToken(RefreshTokenDTO refreshTokenRequest) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
+        return new AuthenticationDTO(jwtProvider.generateTokenWithUserName(refreshTokenRequest.userName()), refreshTokenService.generateRefreshToken().getToken(), LocalDateTime.now().plusSeconds(jwtProvider.getJwtExpirationInMillis()), refreshTokenRequest.userName());
+    }
+
+
+ */

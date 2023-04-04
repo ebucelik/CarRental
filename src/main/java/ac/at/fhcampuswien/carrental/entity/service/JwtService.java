@@ -43,8 +43,12 @@ public class JwtService {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public Boolean isTokenExpired(String token) {
+        if(extractExpiration(token).before(new Date()))
+            return true;
+        else {
+            return false;
+        }
     }
 
     public Boolean validateToken(String token, LoginDTO loginDTO) {
@@ -62,7 +66,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30)) //token valid for 30 Minutes
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*1)) //token valid for 30 Minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -70,6 +74,8 @@ public class JwtService {
         byte[] keyBytes= Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 
 }
 

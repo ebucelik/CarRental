@@ -28,11 +28,13 @@ public class CustomerEntityService {
 
     UserMapper userMapper;
 
-    @Autowired
-    private JwtService jwtService;
+
     public boolean checkCustomerExistance(String email) {
         return customerRepository.existsByeMail(email);
+    }
 
+    public Customer findCustomer(String email){
+        return customerRepository.findByeMail(email);
     }
 
     public RegistrationResponseDto addCustomer(RegistrationRequestDto customerDto) throws CustomerAlreadyExistsException {
@@ -42,13 +44,6 @@ public class CustomerEntityService {
         Customer customer = userMapper.requestMapping(customerDto);
         Customer dbResponse = customerRepository.save(customer);
         return userMapper.responseMapping(dbResponse);
-    }
-
-    public String customerLogin(LoginDTO loginData){
-        Optional<Customer> customer = customerRepository.findByeMailAndPassword(loginData.getEMail(), loginData.getPassword());
-        if(customer.isPresent()){
-            return jwtService.generateToken(loginData.getEMail());
-        } else return "Customer does not exist!";
     }
 
 }

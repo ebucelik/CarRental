@@ -3,7 +3,9 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.service.JwtService;
+import ac.at.fhcampuswien.carrental.expections.AuthenticationException;
 import ac.at.fhcampuswien.carrental.expections.CustomerAlreadyExistsException;
+import ac.at.fhcampuswien.carrental.expections.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.rest.models.*;
 import ac.at.fhcampuswien.carrental.rest.services.CustomerRestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @CrossOrigin
@@ -34,30 +38,61 @@ public class CustomerController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping("/registration")
-    @Operation(summary = "Creates a customers in the database.", tags = {"Customers"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RegistrationResponseDto.class))), @ApiResponse(description ="Customer already Exists", responseCode = "409", content = @Content)})
+    @PostMapping("/auth/registration")
+    @Operation(summary = "Creates a customers in the database.", tags = {"Customers"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RegistrationResponseDto.class))), @ApiResponse(description = "Customer already Exists", responseCode = "409", content = @Content)})
     public ResponseEntity<RegistrationResponseDto> register(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException, MethodArgumentNotValidException {
 
-        RegistrationResponseDto outboundUserRegistrationDto = customerRestService.createCustomer(registrationRequestDto);
-        return new ResponseEntity<>(outboundUserRegistrationDto, HttpStatus.CREATED);
+        RegistrationResponseDto registrationResponseDto = customerRestService.createCustomer(registrationRequestDto);
+        return new ResponseEntity<>(registrationResponseDto, HttpStatus.CREATED);
     }
 
-
-    @PostMapping("/auth")
-    @Operation(summary = "Token Generator Test.", tags = {"Token"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json")), @ApiResponse(description ="Customer already Exists", responseCode = "409", content = @Content)})
-    public String authenticateWithToken(@RequestBody LoginDTO loginDTO){
-        return jwtService.generateToken(loginDTO.getEMail());
-    }
-
-
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     @Operation(summary = "Customer Login.", tags = {"Customers"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
-    public ResponseEntity<RefreshTokenDTO> login(@RequestBody @Valid LoginDTO loginData) {
+    public ResponseEntity<RefreshTokenDTO> login(@RequestBody @Valid LoginDTO loginData) throws AuthenticationException {
 
         String token = customerRestService.login(loginData);
         RefreshTokenDTO tokenResponse = new RefreshTokenDTO(token);
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
+
+    @PostMapping("/auth/refreshtoken")
+    @Operation(summary = "Refresh access token.", tags = {"JWT"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
+    public ResponseEntity<RefreshTokenDTO> refreshToken(@RequestBody @Valid RefreshTokenDTO token) throws CustomerNotFoundException {
+
+        String refreshedToken = customerRestService.refreshAccessToken(token);
+        RefreshTokenDTO tokenResponse = new RefreshTokenDTO(refreshedToken);
+        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    }
+
+/*    @PostMapping("/{email}/logout")
+    @Operation(summary = "Customer Login.", tags = {"Customers"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
+    public ResponseEntity<Object> logout(@PathVariable String email, Token token ) throws InvalidSessionException, UserNotFoundException {
+
+        customerRestService.logout(email, (UUID) session.getAttribute(sessionIdName));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }*/
+
+
+    /*
+    @PostMapping("/auth/refresh/token")
+    @Operation(summary = "Customer Login.", tags = {"Customers"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
+    public ResponseEntity<AuthenticationDTO> refreshTokens(@Valid @RequestBody RefreshTokenDTO refreshTokenRequest) {
+
+        return ResponseEntity.ok(userService.refreshAccessToken(refreshTokenRequest));
+    }
+
+    */
+    @PostMapping("/auth")
+    @Operation(summary = "Token Generator Test.", tags = {"Token"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json")), @ApiResponse(description = "Customer already Exists", responseCode = "409", content = @Content)})
+    public String authenticateWithToken(@RequestBody LoginDTO loginDTO) {
+        return jwtService.generateToken(loginDTO.getEMail());
+    }
+
+
+
+
+
+
 /*
     @PostMapping("/{username}/logout")
     @Operation(summary = "Logs out a user.", tags = {"Users"}, responses = {@ApiResponse(description = "OK", responseCode = "200"), @ApiResponse(description = "User not found", responseCode = "404", content = @Content), @ApiResponse(description = "Invalid session", responseCode = "401", content = @Content)})

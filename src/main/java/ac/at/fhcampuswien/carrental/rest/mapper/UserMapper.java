@@ -11,7 +11,14 @@ import org.mapstruct.MappingConstants;
 public class UserMapper {
 
     public Customer requestMapping(RegistrationRequestDto requestDto) {
-        Customer customer = new Customer(requestDto.getEMail(), requestDto.getFirstName(), requestDto.getLastName(), requestDto.getPassword(), requestDto.getPhoneNumber(), requestDto.getDateOfBirth());
+        Customer customer = Customer.builder()
+                .eMail(requestDto.getEMail())
+                .firstName(requestDto.getFirstName())
+                .lastName(requestDto.getLastName())
+                .dateOfBirth(requestDto.getDateOfBirth())
+                .phoneNumber(requestDto.getPhoneNumber())
+                .build();
+        customer.setPassword(requestDto.getPassword());
         return customer;
     }
 
