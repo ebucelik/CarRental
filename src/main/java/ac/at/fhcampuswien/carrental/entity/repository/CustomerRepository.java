@@ -15,7 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     boolean existsByeMail(String email);
 
-    Optional<Customer> findByeMailAndPassword(String eMail, String password);
+    Customer findByeMail(String email);
 }
 
 

@@ -1,5 +1,6 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
+import ac.at.fhcampuswien.carrental.entity.helper.Hashing;
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.service.CustomerEntityService;
 import ac.at.fhcampuswien.carrental.entity.service.JwtService;
@@ -27,6 +28,8 @@ public class CustomerRestService {
     @NonNull
     CustomerEntityService customerEntityService;
 
+    @Autowired
+    private JwtService jwtService;
 
     public RegistrationResponseDto createCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
         return customerEntityService.addCustomer(registrationRequestDto);
