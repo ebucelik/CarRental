@@ -18,10 +18,12 @@ import java.util.UUID;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false)
     Long id;
     private String eMail;
     private String firstName;
     private String lastName;
+
     private byte[] password;
     private byte[] salt;
     //private UUID session;

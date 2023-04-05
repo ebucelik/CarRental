@@ -27,7 +27,7 @@ public class JwtService {
     }
 
     public Date extractExpiration(String token) {
-            return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -79,9 +79,6 @@ public class JwtService {
         byte[] keyBytes= Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-
-
 }
 
 

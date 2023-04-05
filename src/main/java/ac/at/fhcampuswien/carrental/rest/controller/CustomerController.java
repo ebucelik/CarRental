@@ -23,13 +23,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("api/v1/users")
+@RequestMapping("api/v1/users/")
 @Tag(name = "Customers", description = "Endpoints for managing customers")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerController {
@@ -64,44 +62,11 @@ public class CustomerController {
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
-/*    @PostMapping("/{email}/logout")
-    @Operation(summary = "Customer Login.", tags = {"Customers"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
-    public ResponseEntity<Object> logout(@PathVariable String email, Token token ) throws InvalidSessionException, UserNotFoundException {
-
-        customerRestService.logout(email, (UUID) session.getAttribute(sessionIdName));
-        return new ResponseEntity<>(HttpStatus.OK);
-    }*/
-
-
-    /*
-    @PostMapping("/auth/refresh/token")
-    @Operation(summary = "Customer Login.", tags = {"Customers"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))), @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)})
-    public ResponseEntity<AuthenticationDTO> refreshTokens(@Valid @RequestBody RefreshTokenDTO refreshTokenRequest) {
-
-        return ResponseEntity.ok(userService.refreshAccessToken(refreshTokenRequest));
-    }
-
-    */
     @PostMapping("/auth")
     @Operation(summary = "Token Generator Test.", tags = {"Token"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json")), @ApiResponse(description = "Customer already Exists", responseCode = "409", content = @Content)})
     public String authenticateWithToken(@RequestBody LoginDTO loginDTO) {
         return jwtService.generateToken(loginDTO.getEMail());
     }
-
-
-
-
-
-
-/*
-    @PostMapping("/{username}/logout")
-    @Operation(summary = "Logs out a user.", tags = {"Users"}, responses = {@ApiResponse(description = "OK", responseCode = "200"), @ApiResponse(description = "User not found", responseCode = "404", content = @Content), @ApiResponse(description = "Invalid session", responseCode = "401", content = @Content)})
-    public ResponseEntity<Object> logout(@PathVariable String username, HttpSession session) throws InvalidSessionException, CustomerNotFoundException {
-
-        userService.logout(username, (UUID) session.getAttribute(sessionIdName));
-        session.removeAttribute(sessionIdName);
-        return new ResponseEntity<>(HttpStatus.OK);*/
-
 
 }
 

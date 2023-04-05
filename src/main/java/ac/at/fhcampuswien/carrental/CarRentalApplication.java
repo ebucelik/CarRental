@@ -32,11 +32,14 @@ import java.util.stream.Stream;
 public class CarRentalApplication {
 
     @Autowired
+    @NotNull
     private RentalRepository rentalRepository;
     @Autowired
+    @NotNull
     private CarRepository carRepository;
 
     @Autowired
+    @NotNull
     private CustomerRepository customerRepository;
 
     @PostConstruct
@@ -46,7 +49,7 @@ public class CarRentalApplication {
                 new Car(2L, 20, "Audi", "Q5", "190", "2023-01-01", "Diesel", "example.com"),
                 new Car(3L, 30, "Ferrari", "Enzo", "860", "2023-01-01", "Petrol", "example.com"),
                 new Car(4L, 40, "Lamborghini", "Urus", "650", "2023-01-01", "Petrol", "example.com")
-                ).collect(Collectors.toList());
+        ).collect(Collectors.toList());
         carRepository.saveAll(cars);
 
         List<Rental> rentals = Stream.of(
@@ -67,7 +70,6 @@ public class CarRentalApplication {
     }
 
 }
-
 
 
 

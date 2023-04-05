@@ -20,7 +20,8 @@ public class CarEntityService {
 
     CarRepository carRepository;
     RentalRepository rentalRepository;
-    public List<Car> getFreeCarsBetweenDates(LocalDate from, LocalDate to){
+
+    public List<Car> getFreeCarsBetweenDates(LocalDate from, LocalDate to) {
 
         List<Long> availableCarIDs = rentalRepository.findAllAvailableCarsBetweenDates(from, to);
         List<Car> allAvailableCars = carRepository.findAllById(availableCarIDs);

@@ -18,22 +18,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerRestService {
-
     @NonNull
     CustomerEntityService customerEntityService;
-
     @Autowired
     private JwtService jwtService;
 
     public RegistrationResponseDto createCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
         return customerEntityService.addCustomer(registrationRequestDto);
     }
+
+    final static int MAXVALIDTOKENTIME = 60;
 
     public String customerLogin(LoginDTO loginData) throws AuthenticationException {
         Customer customer = null;
@@ -69,19 +70,17 @@ public class CustomerRestService {
 
     }
 
-
     public String refreshAccessToken(RefreshTokenDTO refreshTokenDTO) throws CustomerNotFoundException {
-        if (jwtService.isTokenExpired(refreshTokenDTO.getToken())) {
-            String eMail = jwtService.extractUserEmail(refreshTokenDTO.getToken());
-            Customer customer = checkCustomerExistance(eMail);
-            if (customer != null) {
-                return jwtService.generateToken(eMail);
-            }
-        } else {
-            //TODO  This statement should be refactored as exception.
-            return "This Token is not expired.";
+        String token = refreshTokenDTO.getToken();
+        String eMail = jwtService.extractUserEmail(token);
+        checkCustomerExistance(eMail);
+        if (Boolean.FALSE.equals(jwtService.isTokenExpired(token)))
+            return token;
+        else {
+            jwtService.isTokenExpired(token);
+            return jwtService.generateToken(eMail);
         }
-        return null;
     }
-
 }
+
+
