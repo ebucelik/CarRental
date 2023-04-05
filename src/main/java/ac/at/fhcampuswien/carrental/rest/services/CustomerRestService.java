@@ -33,9 +33,6 @@ public class CustomerRestService {
     public RegistrationResponseDto createCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
         return customerEntityService.addCustomer(registrationRequestDto);
     }
-
-    final static int MAXVALIDTOKENTIME = 60;
-
     public String customerLogin(LoginDTO loginData) throws AuthenticationException {
         Customer customer = null;
         try {
