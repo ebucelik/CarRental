@@ -27,4 +27,13 @@ public class CarEntityService {
         List<Car> allAvailableCars = carRepository.findAllById(availableCarIDs);
         return allAvailableCars;
     }
+
+    public List<Car> getAllCars() {
+        List<Car> allCars = carRepository.findAll();
+        return allCars;
+    }
+
+
+
+
 }

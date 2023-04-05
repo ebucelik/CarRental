@@ -39,7 +39,7 @@ public class CustomerEntityService {
 
     public RegistrationResponseDto addCustomer(RegistrationRequestDto customerDto) throws CustomerAlreadyExistsException {
         if (checkCustomerExistance(customerDto.getEMail())) {
-            throw new CustomerAlreadyExistsException();
+            throw new CustomerAlreadyExistsException("This Customer exists already.");
         }
         Customer customer = userMapper.requestMapping(customerDto);
         Customer dbResponse = customerRepository.save(customer);

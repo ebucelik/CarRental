@@ -23,42 +23,22 @@ public class CarRestService {
     @NonNull
     JwtService jwtService;
 
+    @NonNull
+    CurrencyRestService currencyRestService;
 
-    public List<Car> getAvailableCars(String token, LocalDate from, LocalDate to) {
-            if(!jwtService.isTokenExpired(token)) {
-                return carEntityService.getFreeCarsBetweenDates(from, to);
-            } else{
-                return null;
-            }
+
+    public List<Car> getAvailableCars(String token, String currency, LocalDate from, LocalDate to) {
+        if (!jwtService.isTokenExpired(token) && currencyRestService.checkIfValidCurrency(currency)) {
+            return carEntityService.getFreeCarsBetweenDates(from, to);
+        } else {
+            return null;
+        }
     }
 
-    public List<Car> getAllCars(String token) {
+    public List<Car> getAllCars(String token, String currency) {
+        if (!jwtService.isTokenExpired(token) && currencyRestService.checkIfValidCurrency(currency)) return carEntityService.getAllCars();
         return null;
     }
 }
 
 
-
-
-
-/*
-@Override
-    @Transactional
-    public void changePassword(ChangePasswordDTO passwordDTO) {
-        if (!passwordDTO.newPassword().equals(passwordDTO.verifiedPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password mismatch");
-        }
-        UserEntity user = getUserEntity(getUserName());
-        validatePassword(passwordDTO.currentPassword(), user.getPassword());
-
-        user.setPassword(passwordEncoderMapper.encodePlainText(passwordDTO.newPassword()));
-    }
-
-    @Override
-    public AuthenticationDTO refreshAccessToken(RefreshTokenDTO refreshTokenRequest) {
-        refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
-        return new AuthenticationDTO(jwtProvider.generateTokenWithUserName(refreshTokenRequest.userName()), refreshTokenService.generateRefreshToken().getToken(), LocalDateTime.now().plusSeconds(jwtProvider.getJwtExpirationInMillis()), refreshTokenRequest.userName());
-    }
-
-
- */

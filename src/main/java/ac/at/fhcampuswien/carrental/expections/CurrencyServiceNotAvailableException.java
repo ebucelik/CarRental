@@ -1,4 +1,7 @@
 package ac.at.fhcampuswien.carrental.expections;
 
-public class CurrencyServiceNotAvailableException extends Throwable  {
+public class CurrencyServiceNotAvailableException extends Exception {
+    public CurrencyServiceNotAvailableException(String message) {
+        super(message);
+    }
 }

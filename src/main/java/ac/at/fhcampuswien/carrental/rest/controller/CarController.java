@@ -42,11 +42,10 @@ public class CarController {
 
     @GetMapping("/allCars")
     @Operation(summary = "Lists all available cars.", tags = {"Cars"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))), @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)})
-    public ResponseEntity<List<Car>> getAllCars(@Valid @RequestHeader("Authorization") String token,
-                                                @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                                @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) throws InvalidSessionException {
+    public ResponseEntity<List<Car>> getAllCars(@Valid @RequestParam("authorization") String token,
+                                                @RequestParam("currency") String currency) throws InvalidSessionException {
 
-        List<Car> allAvailableCars = carRestService.getAllCars(token);
+        List<Car> allAvailableCars = carRestService.getAllCars(token, currency);
         return ResponseEntity.ok(allAvailableCars);
     }
 
@@ -59,28 +58,13 @@ public class CarController {
                     responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
                     @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)})
-    public ResponseEntity<List<Car>> listAvailableCars(@Valid @RequestHeader("Authorization") String token,
+    public ResponseEntity<List<Car>> listAvailableCars(@Valid @RequestParam("authorization") String token,
+                                                       @RequestParam("currency") String currency,
                                                        @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
                                                        @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
 
-        carRestService.getAvailableCars(token, from, to);
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<Car> allAvailableCars = carRestService.getAvailableCars(token, currency, from, to);
+        return new ResponseEntity<>(allAvailableCars, HttpStatus.OK);
     }
-
-
-
-
-
-/*    @GetMapping("/availableCars")
-    @Operation(summary = "Lists all available cars.", tags = {"Cars"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))), @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)})
-    public ResponseEntity<List<Car>> listAvailableCars(@Valid @RequestHeader("Authorization") String token,
-                                                       @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                                       @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) throws InvalidSessionException {
-
-        List<Car> allAvailableCars = carRestService.getAvailableCars(token, from, to);
-
-        return ResponseEntity.ok(allAvailableCars);
-    }*/
-
 
 }
