@@ -1,8 +1,11 @@
 package ac.at.fhcampuswien.carrental.rest.mapper;
 
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
+import ac.at.fhcampuswien.carrental.entity.models.Rental;
 import ac.at.fhcampuswien.carrental.rest.models.RegistrationRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.RegistrationResponseDto;
+import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
+import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -26,6 +29,26 @@ public class UserMapper {
         return RegistrationResponseDto.builder()
                 .id(customer.getId())
                 .eMail(customer.getEMail())
+                .build();
+    }
+
+    public Rental BookingRequestToRental(RentalRequestDto rentalBooking, Long id){
+        return Rental.builder()
+                .customerId(id)
+                .carId(rentalBooking.getCarId())
+                .startDay(rentalBooking.getStartDay())
+                .endDay(rentalBooking.getEndDay())
+                .totalCost(rentalBooking.getTotalCost())
+                .build();
+    }
+
+    public RentalResponseDto RentalToBookingResponse(Rental rental, String eMail){
+        return RentalResponseDto.builder()
+                .eMail(eMail)
+                .carId(rental.getCarId())
+                .startDay(rental.getStartDay())
+                .endDay(rental.getEndDay())
+                .totalCost(rental.getTotalCost())
                 .build();
     }
 }

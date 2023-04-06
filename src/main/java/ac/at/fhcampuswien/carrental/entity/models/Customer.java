@@ -19,7 +19,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false)
-    Long id;
+    private Long id;
     private String eMail;
     private String firstName;
     private String lastName;

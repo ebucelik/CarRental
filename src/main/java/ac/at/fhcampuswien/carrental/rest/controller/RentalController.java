@@ -25,10 +25,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("api/v1/bookings")
+@RequestMapping("api/v1")
 @Tag(name = "Booking", description = "Endpoints for managing bookings.")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RentalController {
