@@ -19,7 +19,12 @@ import java.util.List;
 public interface RentalRepository extends JpaRepository<Rental, Long> {
     @Query(value = "SELECT r.car_id FROM rentals r WHERE NOT (r.start_day >= :startDate AND r.end_day <= :endDate OR r.start_day <= :startDate AND r.end_day >= :endDate OR r.start_day <= :endDate AND r.end_day >= :endDate OR r.start_day <= :startDate AND r.end_day >= :startDate)", nativeQuery = true)
     List<Long> findAllAvailableCarsBetweenDates(
-            @Param("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate startDate, @Param("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate);
+            @Param("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @Param("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate);
 
     //    @Query(value = "SELECT c.* FROM cars c WHERE c.id NOT IN (SELECT r.car_id FROM rentals r WHERE NOT (r.start_day >= :startDate AND r.end_day <= :endDate OR r.start_day <= :startDate AND r.end_day >= :endDate OR r.start_day <= :endDate AND r.end_day >= :endDate OR r.start_day <= :startDate AND r.end_day >= :startDate))", nativeQuery = true)
+
+
+    List<Rental> findByCustomerId(long id);
+
 }
+

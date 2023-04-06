@@ -22,8 +22,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String eMail;
         String url = request.getRequestURI();
 
-        if(!url.contains("/api/v1/users") || !url.contains("/swagger-ui")) {
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if(!url.contains("/api/v1/cars") || !url.contains("/api/v1/users") || !url.contains("/swagger-ui") ) {
+            if (authHeader != null && authHeader.startsWith("Bearer " )) {
                 token = authHeader.substring(7);
                 eMail = jwtService.extractUserEmail(token);
                 System.out.println(eMail);

@@ -50,10 +50,10 @@ public class CurrencyRestService {
         currencies.add("ZAR");
 
         for (String element : currencies) {
-            if (!element.equals(currency))
-                return false;
+            if (element.equals(currency))
+                return true;
         }
-        return true;
+        return false;
     }
 
 }

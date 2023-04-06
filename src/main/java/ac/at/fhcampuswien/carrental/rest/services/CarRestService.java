@@ -28,7 +28,7 @@ public class CarRestService {
 
 
     public List<Car> getAvailableCars(String token, String currency, LocalDate from, LocalDate to) {
-        if (!jwtService.isTokenExpired(token) && currencyRestService.checkIfValidCurrency(currency)) {
+        if (!jwtService.isTokenExpired(token) /*&& jwtService.validateToken2(token) && currencyRestService.checkIfValidCurrency(currency)*/) {
             return carEntityService.getFreeCarsBetweenDates(from, to);
         } else {
             return null;
@@ -36,7 +36,8 @@ public class CarRestService {
     }
 
     public List<Car> getAllCars(String token, String currency) {
-        if (!jwtService.isTokenExpired(token) && currencyRestService.checkIfValidCurrency(currency)) return carEntityService.getAllCars();
+        if (!jwtService.isTokenExpired(token) /*&& currencyRestService.checkIfValidCurrency(currency)*/)
+            return carEntityService.getAllCars();
         return null;
     }
 }
