@@ -1,6 +1,7 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
 
+import ac.at.fhcampuswien.carrental.config.CurrencyClient;
 import ac.at.fhcampuswien.carrental.rest.models.CurrencyRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
@@ -13,15 +14,18 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class CurrencySOAPService {
+
+
+    CurrencyClient currencyClient;
     public boolean checkIfValidCurrency(String currency) {
         return customerCurrencies(currency);
     }
 
 
-/*    public CurrencyResponseDto getAllCurrencies(){
-
-       return new CurrencyResponseDto(currencyConversationService.listCurrencies().getString());
-    }*/
+    public void getAllCurrencies(){
+        GetCurrencyCodesResponse n = currencyClient.getCurrencyResponse();
+       System.out.print(n.getGetCurrencyCodesResult().toString());
+    }
 
 
     //ToDO this have to be refacored in one file
