@@ -48,4 +48,15 @@ public class UserMapper {
                 .totalCost(rental.getTotalCost())
                 .build();
     }
+
+
+    public RentalUpdateResponseDto RentalToUpdateResponse(Rental rentalUpdate) {
+        return RentalUpdateResponseDto.builder()
+                .id(rentalUpdate.getId())
+                .carId(rentalUpdate.getCarId())
+                .startDay(rentalUpdate.getStartDay())
+                .endDay(rentalUpdate.getEndDay())
+                .totalCost(rentalUpdate.getTotalCost())
+                .build();
+    }
 }

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class RentalUpdateResponseDto {
     @NotBlank
     @NotEmpty
-    private Long customerId;
+    private Long id;
 
     @NotBlank
     @NotEmpty

@@ -32,4 +32,5 @@ public class RentalUpdateRequestDto {
     private LocalDate endDay;
 
 
+
 }
