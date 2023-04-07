@@ -67,6 +67,7 @@ dependencies {
             'javax.xml.bind:jaxb-api:2.3.1',
     )
 }
+/*
 
 task generateJavaClasses {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
@@ -87,4 +88,4 @@ task generateJavaClasses {
                 encoding: 'utf-8'
         )
     }
-}
+}*/

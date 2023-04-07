@@ -37,14 +37,15 @@ public class CurrencyController {
     @NotNull
     CurrencySOAPService currencySOAPService;
 
+/*
     @GetMapping("/allCurrency")
     @Operation(summary = "Lists all currencys.", tags = {"Currency"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Currency.class)))})
-    public ResponseEntity<CurrencyResponseDto> getAllCurrencies(@Valid @RequestParam CurrencyRequestDto currencyRequestDto) {
-        //return ResponseEntity.ok(currencySOAPService.getAllCurrencies(currencyRequestDto));
+    public ResponseEntity<CurrencyResponseDto> getAllCurrencies() {
+        return ResponseEntity.ok(currencySOAPService.getAllCurrencies());
 
-        return null;
     }
 }
+*/
 
 
 /*    @GetMapping("/allCars")

@@ -18,6 +18,6 @@ public class CurrencyResponseDto {
 
     @NotBlank
     @NotEmpty
-    List<String> currencies;
+    List<String> exchangeRates;
 }
 
