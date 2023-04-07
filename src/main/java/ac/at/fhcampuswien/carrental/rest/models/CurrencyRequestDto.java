@@ -7,29 +7,16 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
+
 
 @Data
 @Builder
 @Setter
 @Getter
-public class RentalUpdateRequestDto {
+public class CurrencyRequestDto {
 
     @NotBlank
     @NotEmpty
-    private Long id;
-
-    @NotBlank
-    @NotEmpty
-    private Long carId;
-
-    @NotBlank
-    @NotEmpty
-    private LocalDate startDay;
-
-    @NotBlank
-    @NotEmpty
-    private LocalDate endDay;
-
-
+    List<String> exchangeRates;
 }

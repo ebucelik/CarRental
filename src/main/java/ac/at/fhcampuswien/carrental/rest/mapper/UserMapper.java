@@ -2,10 +2,7 @@ package ac.at.fhcampuswien.carrental.rest.mapper;
 
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
-import ac.at.fhcampuswien.carrental.rest.models.RegistrationRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.RegistrationResponseDto;
-import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
+import ac.at.fhcampuswien.carrental.rest.models.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

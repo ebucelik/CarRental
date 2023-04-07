@@ -6,12 +6,15 @@ plugins {
 
 group = 'ac.at.fhcampuswien'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = 17
+
+apply plugin: 'java'
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+
 }
 
 repositories {
@@ -21,6 +24,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation files('easywsdl/ExKsoap2-1.0.4.0.jar')
+    implementation files('easywsdl/ksoap2-android-assembly-3.6.4-jar-with-dependencies.jar')
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
@@ -50,6 +55,36 @@ dependencies {
 
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+configurations {
+    jaxb
+}
+
+dependencies {
+    jaxb(
+            'com.sun.xml.bind:jaxb-core:2.3.0.1',
+            'com.sun.xml.bind:jaxb-xjc:2.3.2',
+            'com.sun.xml.bind:jaxb-impl:2.3.2',
+            'javax.xml.bind:jaxb-api:2.3.1',
+    )
+}
+
+task generateJavaClasses {
+    System.setProperty('javax.xml.accessExternalSchema', 'all')
+    def jaxbTargetDir = file("src/main/java/ac/at/fhcampuswien/carrental/wsdl")
+    doLast {
+        jaxbTargetDir.mkdirs()
+        ant.taskdef(
+                name: 'xjc',
+                classname: 'com.sun.tools.xjc.XJCTask',
+                classpath: configurations.jaxb.asPath
+        )
+        ant.jaxbTargetDir = jaxbTargetDir
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'ac.at.fhcampuswien',
+                schema: 'src/main/resources/api.wsdl',
+                language: 'WSDL',
+                encoding: 'utf-8'
+        )
+    }
 }

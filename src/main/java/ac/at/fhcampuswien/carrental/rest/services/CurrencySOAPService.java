@@ -1,6 +1,8 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
 
+import ac.at.fhcampuswien.carrental.rest.models.CurrencyRequestDto;
+import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,10 +10,17 @@ import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
-public class CurrencyRestService {
+public class CurrencySOAPService {
     public boolean checkIfValidCurrency(String currency) {
         return customerCurrencies(currency);
     }
+
+
+/*    public CurrencyResponseDto getAllCurrencies(){
+
+       return new CurrencyResponseDto(currencyConversationService.listCurrencies().getString());
+    }*/
+
 
     //ToDO this have to be refacored in one file
     private boolean customerCurrencies(String currency) {

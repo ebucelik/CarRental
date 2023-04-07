@@ -6,15 +6,18 @@ import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
+import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateRequestDto;
+import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateResponseDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import ac.at.fhcampuswien.carrental.rest.mapper.UserMapper;
 
-import java.util.ArrayList;
+import java.sql.DataTruncation;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +25,7 @@ import java.util.Optional;
 @Log4j2
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class RentalEntityService {
+public class RentalEntityService extends Throwable {
 
     @Autowired
     RentalRepository rentalRepository;

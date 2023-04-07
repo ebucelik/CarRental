@@ -20,14 +20,14 @@ public class RentalUpdateResponseDto {
 
     @NotBlank
     @NotEmpty
-    private LocalDate updateStartDay;
+    private LocalDate startDay;
 
     @NotBlank
     @NotEmpty
-    private LocalDate updateEndDay;
+    private LocalDate endDay;
 
     @NotBlank
     @NotEmpty
-    private float updateTotalCost;
+    private float totalCost;
 
 }

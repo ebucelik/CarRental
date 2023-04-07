@@ -30,10 +30,9 @@ public class RentalRestService {
     @NonNull
     JwtService jwtService;
     @NonNull
-    CurrencyRestService currencyRestService;
+    CurrencySOAPService currencySOAPService;
     @Autowired
     RentalEntityService rentalEntityService;
-
 
     public List<Rental> getAllBookings(HttpServletRequest request) {
         String accessToken = request.getHeader("Auth");
@@ -50,16 +49,20 @@ public class RentalRestService {
 
 
 
-/*    public RentalUpdateResponseDto updateBooking(String token, RentalUpdateRequestDto rentalUpdateRequestDto) {
-        long customerId = rentalUpdateRequestDto.getCustomerId();
-        Optional<Rental> choosenBooking = getBooking(customerId);
-        RentalUpdateResponseDto = choosenBooking;
+    public RentalUpdateResponseDto updateBooking(RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
+        return rentalEntityService.updateBooking(rentalUpdateRequestDto);
 
     }
 
     public Optional<Rental> getBooking (long id){
         return rentalEntityService.getBookingById(id);
 
-    }*/
+    }
+
+    public void removeBooking(Long id){
+        rentalEntityService.deleteBooking(id);
+    }
+
+
 }
 

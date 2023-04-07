@@ -17,6 +17,6 @@ public class Currency {
     @Id
     private long id;
 
-    private Map<String, String> exchangeRates = new HashMap<>();
+    private final Map<String, String> exchangeRates = new HashMap<>();
 
 }
