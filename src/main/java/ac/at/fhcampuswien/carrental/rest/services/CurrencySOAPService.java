@@ -3,6 +3,8 @@ package ac.at.fhcampuswien.carrental.rest.services;
 
 import ac.at.fhcampuswien.carrental.rest.models.CurrencyRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
+import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
+import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

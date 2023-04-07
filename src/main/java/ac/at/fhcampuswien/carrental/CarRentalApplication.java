@@ -7,6 +7,7 @@ import ac.at.fhcampuswien.carrental.entity.repository.CarRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
+import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
 import ac.at.fhcampuswien.carrental.rest.services.RentalRestService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -42,6 +43,9 @@ public class CarRentalApplication {
     @NotNull
     private CustomerRepository customerRepository;
 
+    @Autowired
+    CurrencySOAPService c;
+
     @PostConstruct
     public void initializeData(){
         List<Car> cars = Stream.of(
@@ -64,6 +68,10 @@ public class CarRentalApplication {
                 new Customer("jt2@.com", "Jenny", "Test", "Apfel2", "123456789", "2000-01-01")
         ).collect(Collectors.toList());
         customerRepository.saveAll(customers);
+
+
+        c.getAllCurrencies();
+
     }
     public static void main(String[] args) {
         SpringApplication.run(CarRentalApplication.class, args);
