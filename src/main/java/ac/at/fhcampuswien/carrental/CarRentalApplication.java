@@ -9,6 +9,7 @@ import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
 import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
 import ac.at.fhcampuswien.carrental.rest.services.RentalRestService;
+import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import jakarta.annotation.PostConstruct;
@@ -47,7 +48,7 @@ public class CarRentalApplication {
     CurrencySOAPService c;
 
     @PostConstruct
-    public void initializeData(){
+    public void initializeData() throws Exception {
         List<Car> cars = Stream.of(
                 new Car(1L, 10, "Volkswagen", "Sharan", "140", "2023-01-01", "Diesel", "example.com"),
                 new Car(2L, 20, "Audi", "Q5", "190", "2023-01-01", "Diesel", "example.com"),
@@ -69,8 +70,9 @@ public class CarRentalApplication {
         ).collect(Collectors.toList());
         customerRepository.saveAll(customers);
 
-
-        c.getAllCurrencies();
+        GetCurrencyCodes ex = new GetCurrencyCodes();
+        System.out.print(ex.getInput()+"apppppppppppppppppppppppppppp");
+        c.getAllCurrencies(ex);
 
     }
     public static void main(String[] args) {

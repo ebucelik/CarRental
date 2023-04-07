@@ -54,7 +54,7 @@
     </wsdl:message>
     <wsdl:service name="CurrencyConverterWebService">
         <wsdl:port name="Application" binding="tns:Application">
-            <wsdlsoap11:address location="http://localhost:8080/"/>
+            <wsdlsoap11:address location="http://localhost:8000/"/>
         </wsdl:port>
     </wsdl:service>
     <wsdl:portType name="Application">

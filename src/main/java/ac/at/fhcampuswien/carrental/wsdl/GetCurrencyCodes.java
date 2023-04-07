@@ -9,10 +9,7 @@
 package ac.at.fhcampuswien.carrental.wsdl;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -34,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
+@jakarta.xml.bind.annotation.XmlRootElement(name="GetCurrencyCodes")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getCurrencyCodes", propOrder = {
     "input"

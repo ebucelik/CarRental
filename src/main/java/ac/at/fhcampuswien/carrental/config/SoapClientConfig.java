@@ -1,5 +1,6 @@
 package ac.at.fhcampuswien.carrental.config;
 
+import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -13,7 +14,8 @@ public class SoapClientConfig {
     public static String baseURI;
     //private final String path = "src/main/resources/wsdl/currencyConverter.wsdl";
     public SoapClientConfig() throws Exception {
-        try
+        baseNameSpace = "http://localhost:8000/";
+        /*try
         {
             InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("api.wsdl");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceStream));
@@ -44,7 +46,7 @@ public class SoapClientConfig {
         catch (Exception e)
         {
             throw new Exception("Exception while finding out BaseNameSpace");
-        }
+        }*/
 
 
     }
@@ -52,7 +54,8 @@ public class SoapClientConfig {
     @Bean
     public Jaxb2Marshaller marshaller(){
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        jaxb2Marshaller.setContextPath("src/main/resources/api.wsdl");
+
+        jaxb2Marshaller.setClassesToBeBound(GetCurrencyCodes.class);
         return jaxb2Marshaller;
     }
 

@@ -33,9 +33,9 @@ import java.util.List;
 public class CurrencyController {
 
 
-    @Autowired
-    @NotNull
-    CurrencySOAPService currencySOAPService;
+//    @Autowired
+//    @NotNull
+//    CurrencySOAPService currencySOAPService;
 
 /*
     @GetMapping("/allCurrency")
@@ -56,3 +56,4 @@ public class CurrencyController {
         return ResponseEntity.ok(allAvailableCars);
     }
 }*/
+}

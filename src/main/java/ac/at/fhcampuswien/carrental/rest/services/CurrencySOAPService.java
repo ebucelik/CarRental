@@ -7,6 +7,7 @@ import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodesResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,14 +17,16 @@ import java.util.ArrayList;
 public class CurrencySOAPService {
 
 
+    @Autowired
     CurrencyClient currencyClient;
     public boolean checkIfValidCurrency(String currency) {
         return customerCurrencies(currency);
     }
 
 
-    public void getAllCurrencies(){
-        GetCurrencyCodesResponse n = currencyClient.getCurrencyResponse();
+    public void getAllCurrencies(GetCurrencyCodes ex) throws Exception {
+
+        GetCurrencyCodesResponse n = currencyClient.getCurrencyResponse(ex);
        System.out.print(n.getGetCurrencyCodesResult().toString());
     }
 

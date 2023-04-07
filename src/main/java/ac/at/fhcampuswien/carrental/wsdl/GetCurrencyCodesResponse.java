@@ -9,10 +9,7 @@
 package ac.at.fhcampuswien.carrental.wsdl;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -38,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "getCurrencyCodesResponse", propOrder = {
     "getCurrencyCodesResult"
 })
+@XmlSeeAlso({GetCurrencyCodes.class})
 public class GetCurrencyCodesResponse {
 
     @XmlElementRef(name = "getCurrencyCodesResult", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)

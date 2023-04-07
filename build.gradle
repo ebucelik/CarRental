@@ -53,6 +53,19 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    //SOAP/WSDL
+    // https://mvnrepository.com/artifact/javax.jws/javax.jws-api
+    implementation group: 'javax.jws', name: 'javax.jws-api', version: '1.1'
+    // https://mvnrepository.com/artifact/javax.xml.ws/jaxws-api
+    implementation group: 'javax.xml.ws', name: 'jaxws-api', version: '2.3.1'
+    // https://mvnrepository.com/artifact/javax.xml.soap/javax.xml.soap-api
+    implementation group: 'javax.xml.soap', name: 'javax.xml.soap-api', version: '1.4.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    // https://mvnrepository.com/artifact/wsdl4j/wsdl4j
+    implementation group: 'wsdl4j', name: 'wsdl4j', version: '1.6.2'
+
+
 }
 
 configurations {
@@ -67,8 +80,8 @@ dependencies {
             'javax.xml.bind:jaxb-api:2.3.1',
     )
 }
-/*
 
+/*
 task generateJavaClasses {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
     def jaxbTargetDir = file("src/main/java/ac/at/fhcampuswien/carrental/")
@@ -88,4 +101,5 @@ task generateJavaClasses {
                 encoding: 'utf-8'
         )
     }
-}*/
+}
+*/
