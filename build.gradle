@@ -70,7 +70,7 @@ dependencies {
 
 task generateJavaClasses {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
-    def jaxbTargetDir = file("src/main/java/ac/at/fhcampuswien/carrental/wsdl")
+    def jaxbTargetDir = file("src/main/java/ac/at/fhcampuswien/carrental/")
     doLast {
         jaxbTargetDir.mkdirs()
         ant.taskdef(
@@ -81,7 +81,7 @@ task generateJavaClasses {
         ant.jaxbTargetDir = jaxbTargetDir
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'ac.at.fhcampuswien',
+                package: 'wsdl',
                 schema: 'src/main/resources/api.wsdl',
                 language: 'WSDL',
                 encoding: 'utf-8'
