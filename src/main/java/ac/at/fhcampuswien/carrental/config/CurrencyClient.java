@@ -2,9 +2,7 @@
 package ac.at.fhcampuswien.carrental.config;
 
 
-import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
-import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodesResponse;
-import ac.at.fhcampuswien.carrental.wsdl.ObjectFactory;
+import ac.at.fhcampuswien.carrental.wsdl.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -14,37 +12,36 @@ import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 
 @Service
-    public class CurrencyClient extends WebServiceGatewaySupport {
+public class CurrencyClient{
+    @Autowired
+    @NotNull
+    private Jaxb2Marshaller marshaller;
 
+    private WebServiceTemplate template;
 
+    private final String URI = "http://localhost:8000/";
 
-
-        @Autowired
-        private Jaxb2Marshaller marshaller;
-
-        private WebServiceTemplate template;
-        public GetCurrencyCodesResponse getCurrencyResponse(GetCurrencyCodes ex) throws Exception {
-            SoapClientConfig config = new SoapClientConfig();
-            template = new WebServiceTemplate(marshaller);
-            //ConvertCurrency getCurrencyRequest = new ConvertCurrency();
-            // JAXBElement<String> sourceCurrencyElement = factory.createConvertCurrencySourceCurrency(sourceCurrency);
-            //  JAXBElement<String> destinationCurrencyElement = factory.createConvertCurrencyDestinationCurrency(destinationCurrency);
-//            getCurrencyRequest.setSourceCurrency((JAXBElement<String>)(factory.createConvertCurrencySourceCurrency(sourceCurrency)));
-//            getCurrencyRequest.setDestinationCurrency((JAXBElement<String>)factory.createConvertCurrencyDestinationCurrency(destinationCurrency));
-//            getCurrencyRequest.setValue(50.0);
-
-            return (GetCurrencyCodesResponse) template.marshalSendAndReceive("http://localhost:8000/", ex);
-
-        }
-        /*public ConvertCurrencyListResponse convertCurrencyListResponse(ArrayOfdouble values, String sourceCurrency, String destinationCurrency)
-        {
-            ConvertCurrencyList getCurrencyRequestList = new ConvertCurrencyList();
-
-            getCurrencyRequestList.setValues((JAXBElement<ArrayOfdouble>) factory.createConvertCurrencyListValues(values));
-            getCurrencyRequestList.setSourceCurrency((JAXBElement<String>) factory.createConvertCurrencySourceCurrency(sourceCurrency));
-            getCurrencyRequestList.setDestinationCurrency((JAXBElement<String>) factory.createConvertCurrencyDestinationCurrency(destinationCurrency));
-            return (ConvertCurrencyListResponse) getWebServiceTemplate().marshalSendAndReceive(getCurrencyRequestList,new SoapActionCallback(SoapClientConfig.baseNameSpace+"convertCurrencyList")) ;
-        }*/
-
-
+    public GetCurrencyCodesResponse getCurrencyResponse(GetCurrencyCodes ex) throws Exception {
+        SoapClientConfig config = new SoapClientConfig();
+        //Convert Object in XML
+        template = new WebServiceTemplate(marshaller);
+        GetCurrencyCodesResponse z = (GetCurrencyCodesResponse) template.marshalSendAndReceive(URI, ex);
+        StringArray as = z.getGetCurrencyCodesResult();
+        System.out.println("The List= " + z.getGetCurrencyCodesResult().getString().get(1));
+        return z;
     }
+
+    public GetConvertedValueResponse getCurrencyValue(GetConvertedValue ex) throws Exception {
+
+        ex.setCurrentValue(5f);
+        ex.setCurrentCurrencyCode("EUR");
+        ex.setExpectedCurrencyCode("GBP");
+        template = new WebServiceTemplate(marshaller);
+        GetConvertedValueResponse z = (GetConvertedValueResponse) template.marshalSendAndReceive(URI, ex);
+        System.out.println("The result= " + z.getGetConvertedValueResult());
+        return z;
+    }
+
+
+
+}

@@ -1,11 +1,9 @@
 package ac.at.fhcampuswien.carrental.config;
 
-import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
+import ac.at.fhcampuswien.carrental.wsdl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-
-import java.io.*;
 
 @Configuration
 public class SoapClientConfig {
@@ -54,19 +52,18 @@ public class SoapClientConfig {
     @Bean
     public Jaxb2Marshaller marshaller(){
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-
-        jaxb2Marshaller.setClassesToBeBound(GetCurrencyCodes.class);
+        jaxb2Marshaller.setClassesToBeBound(GetConvertedValue.class, GetConvertedValueResponse.class, GetCurrencyCodes.class, GetCurrencyCodesResponse.class, StringArray.class);
         return jaxb2Marshaller;
     }
 
-    @Bean
-    public CurrencyClient articleClient(Jaxb2Marshaller jaxb2Marshaller) {
-        CurrencyClient currencyClient = new CurrencyClient();
-        currencyClient.setDefaultUri(baseURI);
-        currencyClient.setMarshaller(jaxb2Marshaller);
-        currencyClient.setUnmarshaller(jaxb2Marshaller);
-        return currencyClient;
-    }
+   /* @Bean
+    public CurrencyClient1 currencyClient(Jaxb2Marshaller jaxb2Marshaller) {
+        CurrencyClient1 service = new CurrencyClient1();
+        service.setDefaultUri(baseURI);
+        service.setMarshaller(jaxb2Marshaller);
+        service.setUnmarshaller(jaxb2Marshaller);
+        return service;
+    }*/
 
     public String getWSDLSubstring(String line)
     {

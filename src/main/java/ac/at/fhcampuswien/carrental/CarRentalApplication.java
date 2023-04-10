@@ -9,6 +9,7 @@ import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
 import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
 import ac.at.fhcampuswien.carrental.rest.services.RentalRestService;
+import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -70,14 +71,14 @@ public class CarRentalApplication {
         ).collect(Collectors.toList());
         customerRepository.saveAll(customers);
 
-        GetCurrencyCodes ex = new GetCurrencyCodes();
-        System.out.print(ex.getInput()+"apppppppppppppppppppppppppppp");
+        GetConvertedValue ex = new GetConvertedValue();
+        GetCurrencyCodes exe = new GetCurrencyCodes();
+        c.getAllCurrencies1(exe);
         c.getAllCurrencies(ex);
 
     }
     public static void main(String[] args) {
-        SpringApplication.run(CarRentalApplication.class, args);
-    }
+        SpringApplication.run(CarRentalApplication.class, args);}
 
 }
 

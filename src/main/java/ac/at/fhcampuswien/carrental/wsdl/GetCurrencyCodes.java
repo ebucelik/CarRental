@@ -8,8 +8,7 @@
 
 package ac.at.fhcampuswien.carrental.wsdl;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+
 
 
 /**
@@ -31,15 +30,15 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@jakarta.xml.bind.annotation.XmlRootElement(name="GetCurrencyCodes")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getCurrencyCodes", propOrder = {
+@jakarta.xml.bind.annotation.XmlRootElement(name = "getCurrencyCodes", namespace = "currencyconverter.ac.at.fhcampuswien")
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlType(name = "getCurrencyCodes", propOrder = {
     "input"
 })
 public class GetCurrencyCodes {
 
-    @XmlElementRef(name = "input", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> input;
+    @jakarta.xml.bind.annotation.XmlElement(name = "input", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected String input;
 
     /**
      * Ruft den Wert der input-Eigenschaft ab.
@@ -49,7 +48,7 @@ public class GetCurrencyCodes {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getInput() {
+    public String getInput() {
         return input;
     }
 
@@ -61,7 +60,7 @@ public class GetCurrencyCodes {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setInput(JAXBElement<String> value) {
+    public void setInput(String value) {
         this.input = value;
     }
 

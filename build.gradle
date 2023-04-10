@@ -81,6 +81,7 @@ dependencies {
     )
 }
 
+//Generates .java classes based on wsdl
 /*
 task generateJavaClasses {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
@@ -95,11 +96,12 @@ task generateJavaClasses {
         ant.jaxbTargetDir = jaxbTargetDir
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'wsdl',
-                schema: 'src/main/resources/api.wsdl',
+                package: 'apiserver',
+                schema: 'src/main/resources/apiserver.wsdl',
                 language: 'WSDL',
                 encoding: 'utf-8'
         )
     }
 }
+
 */

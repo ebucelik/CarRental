@@ -1,9 +1,10 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
 
+//import ac.at.fhcampuswien.carrental.config.CurrencyClient;
 import ac.at.fhcampuswien.carrental.config.CurrencyClient;
-import ac.at.fhcampuswien.carrental.rest.models.CurrencyRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
+import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
+import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValueResponse;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodesResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,17 @@ public class CurrencySOAPService {
     }
 
 
-    public void getAllCurrencies(GetCurrencyCodes ex) throws Exception {
+    public void getAllCurrencies(GetConvertedValue ex) throws Exception {
+
+        GetConvertedValueResponse n = currencyClient.getCurrencyValue(ex);
+       System.out.print(n.getGetConvertedValueResult().toString());
+    }
+    public void getAllCurrencies1(GetCurrencyCodes ex) throws Exception {
 
         GetCurrencyCodesResponse n = currencyClient.getCurrencyResponse(ex);
-       System.out.print(n.getGetCurrencyCodesResult().toString());
+        for (String x: n.getGetCurrencyCodesResult().getString()) {
+            System.out.println("Value: " + x);
+        }
     }
 
 

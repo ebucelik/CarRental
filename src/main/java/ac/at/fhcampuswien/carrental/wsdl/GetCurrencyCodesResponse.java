@@ -8,8 +8,8 @@
 
 package ac.at.fhcampuswien.carrental.wsdl;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlList;
 
 
 /**
@@ -31,15 +31,16 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getCurrencyCodesResponse", propOrder = {
+@jakarta.xml.bind.annotation.XmlRootElement(name = "getCurrencyCodesResponse", namespace = "currencyconverter.ac.at.fhcampuswien")
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlType(name = "getCurrencyCodesResponse", propOrder = {
     "getCurrencyCodesResult"
 })
-@XmlSeeAlso({GetCurrencyCodes.class})
 public class GetCurrencyCodesResponse {
 
-    @XmlElementRef(name = "getCurrencyCodesResult", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<StringArray> getCurrencyCodesResult;
+
+    @jakarta.xml.bind.annotation.XmlElement(name = "getCurrencyCodesResult", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected StringArray getCurrencyCodesResult;
 
     /**
      * Ruft den Wert der getCurrencyCodesResult-Eigenschaft ab.
@@ -49,7 +50,7 @@ public class GetCurrencyCodesResponse {
      *     {@link JAXBElement }{@code <}{@link StringArray }{@code >}
      *     
      */
-    public JAXBElement<StringArray> getGetCurrencyCodesResult() {
+    public StringArray getGetCurrencyCodesResult() {
         return getCurrencyCodesResult;
     }
 
@@ -61,7 +62,7 @@ public class GetCurrencyCodesResponse {
      *     {@link JAXBElement }{@code <}{@link StringArray }{@code >}
      *     
      */
-    public void setGetCurrencyCodesResult(JAXBElement<StringArray> value) {
+    public void setGetCurrencyCodesResult(StringArray value) {
         this.getCurrencyCodesResult = value;
     }
 

@@ -8,8 +8,9 @@
 
 package ac.at.fhcampuswien.carrental.wsdl;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+
+
+import jakarta.xml.bind.annotation.*;
 
 
 /**
@@ -31,15 +32,15 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getConvertedValueResponse", propOrder = {
+@jakarta.xml.bind.annotation.XmlRootElement(name = "getConvertedValueResponse", namespace = "currencyconverter.ac.at.fhcampuswien")
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlType(name = "getConvertedValueResponse", propOrder = {
     "getConvertedValueResult"
 })
-@XmlSeeAlso({GetCurrencyCodes.class})
 public class GetConvertedValueResponse {
 
-    @XmlElementRef(name = "getConvertedValueResult", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<Double> getConvertedValueResult;
+    @jakarta.xml.bind.annotation.XmlElement(name = "getConvertedValueResult", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected Double getConvertedValueResult;
 
     /**
      * Ruft den Wert der getConvertedValueResult-Eigenschaft ab.
@@ -49,7 +50,7 @@ public class GetConvertedValueResponse {
      *     {@link JAXBElement }{@code <}{@link Double }{@code >}
      *     
      */
-    public JAXBElement<Double> getGetConvertedValueResult() {
+    public Double getGetConvertedValueResult() {
         return getConvertedValueResult;
     }
 
@@ -61,7 +62,7 @@ public class GetConvertedValueResponse {
      *     {@link JAXBElement }{@code <}{@link Double }{@code >}
      *     
      */
-    public void setGetConvertedValueResult(JAXBElement<Double> value) {
+    public void setGetConvertedValueResult(Double value) {
         this.getConvertedValueResult = value;
     }
 

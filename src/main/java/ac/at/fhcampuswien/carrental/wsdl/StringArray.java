@@ -10,7 +10,7 @@ package ac.at.fhcampuswien.carrental.wsdl;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
+
 
 
 /**
@@ -32,14 +32,14 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "stringArray", propOrder = {
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlType(name = "stringArray", propOrder = {
     "string"
 })
-@XmlSeeAlso({GetCurrencyCodes.class})
 public class StringArray {
 
-    @XmlElement(nillable = true)
+
+    @jakarta.xml.bind.annotation.XmlElement(name = "string", namespace = "currencyconverter.ac.at.fhcampuswien", nillable = true)
     protected List<String> string;
 
     /**

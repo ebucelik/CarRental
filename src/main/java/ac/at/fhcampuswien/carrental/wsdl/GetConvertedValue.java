@@ -8,8 +8,8 @@
 
 package ac.at.fhcampuswien.carrental.wsdl;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+
+import jakarta.xml.bind.annotation.*;
 
 
 /**
@@ -33,21 +33,22 @@ import javax.xml.bind.annotation.*;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getConvertedValue", propOrder = {
+
+@jakarta.xml.bind.annotation.XmlRootElement(name = "getConvertedValue", namespace = "currencyconverter.ac.at.fhcampuswien")
+@jakarta.xml.bind.annotation.XmlAccessorType(jakarta.xml.bind.annotation.XmlAccessType.FIELD)
+@jakarta.xml.bind.annotation.XmlType(name = "getConvertedValue", propOrder = {
     "currentValue",
     "currentCurrencyCode",
     "expectedCurrencyCode"
 })
-@XmlSeeAlso({GetCurrencyCodes.class})
 public class GetConvertedValue {
 
-    @XmlElementRef(name = "current_value", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<Float> currentValue;
-    @XmlElementRef(name = "current_currency_code", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> currentCurrencyCode;
-    @XmlElementRef(name = "expected_currency_code", namespace = "currencyconverter.ac.at.fhcampuswien", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> expectedCurrencyCode;
+    @jakarta.xml.bind.annotation.XmlElement(name = "current_value", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected Float currentValue;
+    @jakarta.xml.bind.annotation.XmlElement(name = "current_currency_code", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected String currentCurrencyCode;
+    @jakarta.xml.bind.annotation.XmlElement(name = "expected_currency_code", namespace = "currencyconverter.ac.at.fhcampuswien")
+    protected String expectedCurrencyCode;
 
     /**
      * Ruft den Wert der currentValue-Eigenschaft ab.
@@ -57,7 +58,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link Float }{@code >}
      *     
      */
-    public JAXBElement<Float> getCurrentValue() {
+    public Float getCurrentValue() {
         return currentValue;
     }
 
@@ -69,7 +70,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link Float }{@code >}
      *     
      */
-    public void setCurrentValue(JAXBElement<Float> value) {
+    public void setCurrentValue(Float value) {
         this.currentValue = value;
     }
 
@@ -81,7 +82,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getCurrentCurrencyCode() {
+    public String getCurrentCurrencyCode() {
         return currentCurrencyCode;
     }
 
@@ -93,7 +94,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setCurrentCurrencyCode(JAXBElement<String> value) {
+    public void setCurrentCurrencyCode(String value) {
         this.currentCurrencyCode = value;
     }
 
@@ -105,7 +106,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getExpectedCurrencyCode() {
+    public String getExpectedCurrencyCode() {
         return expectedCurrencyCode;
     }
 
@@ -117,7 +118,7 @@ public class GetConvertedValue {
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setExpectedCurrencyCode(JAXBElement<String> value) {
+    public void setExpectedCurrencyCode(String value) {
         this.expectedCurrencyCode = value;
     }
 
