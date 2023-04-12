@@ -4,10 +4,7 @@ import ac.at.fhcampuswien.carrental.entity.helper.Hashing;
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.service.CustomerEntityService;
 import ac.at.fhcampuswien.carrental.entity.service.JwtService;
-import ac.at.fhcampuswien.carrental.expections.AuthenticationException;
-import ac.at.fhcampuswien.carrental.expections.CustomerAlreadyExistsException;
-import ac.at.fhcampuswien.carrental.expections.CustomerNotFoundException;
-import ac.at.fhcampuswien.carrental.expections.InvalidPasswordException;
+import ac.at.fhcampuswien.carrental.expections.*;
 import ac.at.fhcampuswien.carrental.rest.models.LoginDTO;
 import ac.at.fhcampuswien.carrental.rest.models.RefreshTokenDTO;
 import ac.at.fhcampuswien.carrental.rest.models.RegistrationRequestDto;
@@ -26,13 +23,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomerRestService {
     @NonNull
+
     CustomerEntityService customerEntityService;
     @Autowired
     private JwtService jwtService;
 
-    public RegistrationResponseDto createCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
+    public RegistrationResponseDto createCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException{
         return customerEntityService.addCustomer(registrationRequestDto);
     }
+
     public String customerLogin(LoginDTO loginData) throws AuthenticationException {
         Customer customer = null;
         try {
@@ -67,9 +66,10 @@ public class CustomerRestService {
 
     }
 
-    public String refreshAccessToken(RefreshTokenDTO refreshTokenDTO) throws CustomerNotFoundException {
+    public String refreshAccessToken(RefreshTokenDTO refreshTokenDTO) throws CustomerNotFoundException, InvalidTokenExcpetion {
         String token = refreshTokenDTO.getToken();
         String eMail = jwtService.extractUserEmail(token);
+        //Todo what if the customer is not found when we extract the token
         checkCustomerExistance(eMail);
         if (Boolean.FALSE.equals(jwtService.isTokenExpired(token)))
             return token;
@@ -78,6 +78,12 @@ public class CustomerRestService {
             return jwtService.generateToken(eMail);
         }
     }
+
+/*    public Boolean checkJWT(String refreshTokenDTO) throws CustomerNotFoundException {
+        if (Boolean.TRUE.equals(jwtService.validateToken(String.valueOf(refreshTokenDTO))))
+            return true;
+        return false;
+    }*/
 }
 
 

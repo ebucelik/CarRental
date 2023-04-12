@@ -13,7 +13,7 @@ import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 @Service
 public class CurrencyClient{
-    @Autowired
+/*    @Autowired
     @NotNull
     private Jaxb2Marshaller marshaller;
 
@@ -40,7 +40,7 @@ public class CurrencyClient{
         GetConvertedValueResponse z = (GetConvertedValueResponse) template.marshalSendAndReceive(URI, ex);
         System.out.println("The result= " + z.getGetConvertedValueResult());
         return z;
-    }
+    }*/
 
 
 

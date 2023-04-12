@@ -1,10 +1,12 @@
 package ac.at.fhcampuswien.carrental.entity.service;
 
+import ac.at.fhcampuswien.carrental.expections.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.rest.models.LoginDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -18,6 +20,10 @@ public class JwtService {
 
     //256-bit encryption for key
     public static final String SECRET = "58703273357638792F423F4528472B4B6250655368566D597133743677397A24";
+
+    @NotNull
+
+    CustomerEntityService customerEntityService;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -40,26 +46,28 @@ public class JwtService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch(ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
 
     public Boolean isTokenExpired(String token) {
-        if(extractExpiration(token).before(new Date()))
+        if (extractExpiration(token).before(new Date()))
             return true;
         else {
             return false;
         }
     }
 
-    public Boolean validateToken(String token, LoginDTO loginDTO) {
+/*    public Boolean validateToken(String token) throws CustomerNotFoundException {
         final String userEmail = extractUserEmail(token);
-        return (userEmail.equals(loginDTO.getEMail()) && !isTokenExpired(token));
-    }
+        if (customerEntityService.checkCustomerExistance(userEmail))
+            return true;
+        throw new CustomerNotFoundException("This customers token does not exist.");
+    }*/
 
-    public String generateToken(String userEmail){
-        Map<String,Object> claims = new HashMap<>();
+    public String generateToken(String userEmail) {
+        Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userEmail);
     }
 
@@ -68,25 +76,15 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*5)) //token valid for 30 Minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) //token valid for 30 Minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
     private Key getSignKey() {
-        byte[] keyBytes= Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean validateToken2(String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .build()
-                    .parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
 
 

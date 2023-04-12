@@ -73,8 +73,8 @@ public class CarRentalApplication {
 
         GetConvertedValue ex = new GetConvertedValue();
         GetCurrencyCodes exe = new GetCurrencyCodes();
-        c.getAllCurrencies1(exe);
-        c.getAllCurrencies(ex);
+        //c.getAllCurrencies1(exe);
+        //c.getAllCurrencies(ex);
 
     }
     public static void main(String[] args) {

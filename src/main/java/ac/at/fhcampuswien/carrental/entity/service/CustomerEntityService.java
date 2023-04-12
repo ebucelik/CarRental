@@ -4,6 +4,7 @@ package ac.at.fhcampuswien.carrental.entity.service;
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
 import ac.at.fhcampuswien.carrental.expections.CustomerAlreadyExistsException;
+import ac.at.fhcampuswien.carrental.expections.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.rest.mapper.UserMapper;
 import ac.at.fhcampuswien.carrental.rest.models.LoginDTO;
 import ac.at.fhcampuswien.carrental.rest.models.RegistrationRequestDto;
@@ -29,7 +30,7 @@ public class CustomerEntityService {
     UserMapper userMapper;
 
 
-    public boolean checkCustomerExistance(String email) {
+    public boolean checkCustomerExistance(String email)  {
         return customerRepository.existsByeMail(email);
     }
 
@@ -45,5 +46,7 @@ public class CustomerEntityService {
         Customer dbResponse = customerRepository.save(customer);
         return userMapper.responseMapping(dbResponse);
     }
+
+
 
 }
