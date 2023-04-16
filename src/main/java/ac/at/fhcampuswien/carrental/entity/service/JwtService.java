@@ -1,11 +1,15 @@
 package ac.at.fhcampuswien.carrental.entity.service;
 
+import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -13,15 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Component
+@Service
 public class JwtService {
 
     //256-bit encryption for key
     public static final String SECRET = "58703273357638792F423F4528472B4B6250655368566D597133743677397A24";
 
-    @NotNull
+    @Autowired
+    CustomerRepository customerRepository;
 
-    CustomerEntityService customerEntityService;
+    public enum Token {
+        AccessToken,
+        RefreshToken
+    }
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -49,30 +57,39 @@ public class JwtService {
         }
     }
 
-    public void isTokenExpired(String token) throws InvalidTokenException {
+    public void isTokenExpiredOrInvalid(String token) throws InvalidTokenException, CustomerNotFoundException {
         if (extractExpiration(token).before(new Date())) {
-            throw new InvalidTokenException("Access token is expired or not valid.");
+            throw new InvalidTokenException("Token is expired.");
+        }
+
+        validateToken(token);
+    }
+
+    public void validateToken(String token) throws CustomerNotFoundException {
+        String userEmail = extractUserEmail(token);
+
+        if (!customerRepository.existsByeMail(userEmail)) {
+            throw new CustomerNotFoundException("Token is invalid.");
         }
     }
 
-/*    public Boolean validateToken(String token) throws CustomerNotFoundException {
-        final String userEmail = extractUserEmail(token);
-        if (customerEntityService.checkCustomerExistance(userEmail))
-            return true;
-        throw new CustomerNotFoundException("This customers token does not exist.");
-    }*/
-
-    public String generateToken(String userEmail) {
+    public String generateToken(String userEmail, Token token) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userEmail);
+        return createToken(claims, userEmail, token);
     }
 
-    private String createToken(Map<String, Object> claims, String userEmail) {
+    private String createToken(Map<String, Object> claims, String userEmail, Token token) {
+        int expirationTimeInMillis = 0;
+
+        switch(token) {
+            case AccessToken -> expirationTimeInMillis = 60;
+            case RefreshToken -> expirationTimeInMillis = 60 * 60 * 24;
+        }
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) //token valid for 30 Minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expirationTimeInMillis)) //token valid for 30 Minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -80,7 +97,6 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }
 
 

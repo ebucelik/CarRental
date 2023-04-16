@@ -8,10 +8,7 @@ import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsEx
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidPasswordException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
-import ac.at.fhcampuswien.carrental.rest.models.LoginDTO;
-import ac.at.fhcampuswien.carrental.rest.models.RefreshTokenDTO;
-import ac.at.fhcampuswien.carrental.rest.models.RegistrationRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.RegistrationResponseDto;
+import ac.at.fhcampuswien.carrental.rest.models.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +29,18 @@ public class CustomerRestService {
         return customerEntityService.addCustomer(registrationRequestDto);
     }
 
-    public String customerLogin(LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
+    public LoginResponseDTO customerLogin(LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
         Customer customer = checkCustomerExistence(loginData.getEMail());
 
         checkPassword(loginData.getPassword(), customer);
 
-        return jwtService.generateToken(loginData.getEMail());
+        String accessToken = jwtService.generateToken(loginData.getEMail(), JwtService.Token.AccessToken);
+        String refreshToken = jwtService.generateToken(loginData.getEMail(), JwtService.Token.RefreshToken);
+
+        return new LoginResponseDTO(
+                accessToken,
+                refreshToken
+        );
     }
 
     private Customer checkCustomerExistence(String email) throws CustomerNotFoundException {
@@ -63,19 +66,13 @@ public class CustomerRestService {
         return Arrays.equals(hash, customer.getPassword());
     }
 
-    public String refreshAccessToken(RefreshTokenDTO refreshTokenDTO) throws CustomerNotFoundException {
-        String token = refreshTokenDTO.getToken();
+    public String refreshAccessToken(RefreshTokenDTO refreshTokenDTO) throws InvalidTokenException, CustomerNotFoundException {
+        String token = refreshTokenDTO.getRefreshToken();
         String eMail = jwtService.extractUserEmail(token);
-        //Todo what if the customer is not found when we extract the token
-        checkCustomerExistence(eMail);
 
-        try {
-            jwtService.isTokenExpired(token);
+        jwtService.isTokenExpiredOrInvalid(token);
 
-            return token;
-        } catch(InvalidTokenException invalidTokenException) {
-            return jwtService.generateToken(eMail);
-        }
+        return jwtService.generateToken(eMail, JwtService.Token.AccessToken);
     }
 
 /*    public Boolean checkJWT(String refreshTokenDTO) throws CustomerNotFoundException {

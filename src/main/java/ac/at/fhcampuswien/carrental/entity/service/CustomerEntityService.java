@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 public class CustomerEntityService {
 
     CustomerRepository customerRepository;
-
     UserMapper userMapper;
-
 
     public void checkCustomerExistence(String email) throws CustomerAlreadyExistsException {
         if (customerRepository.existsByeMail(email)) {
@@ -42,7 +40,4 @@ public class CustomerEntityService {
 
         return userMapper.responseMapping(dbResponse);
     }
-
-
-
 }

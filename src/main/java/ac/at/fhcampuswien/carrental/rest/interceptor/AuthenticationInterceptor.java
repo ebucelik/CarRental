@@ -5,13 +5,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    JwtService jwtService = new JwtService();
+    JwtService jwtService;
+
+    public AuthenticationInterceptor(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -22,7 +25,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         String accessToken = request.getHeader("Auth");
 
-        jwtService.isTokenExpired(accessToken);
+        jwtService.isTokenExpiredOrInvalid(accessToken);
 
         return true;
     }
