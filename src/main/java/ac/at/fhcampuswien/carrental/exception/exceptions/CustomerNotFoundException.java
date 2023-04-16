@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.carrental.expections;
+package ac.at.fhcampuswien.carrental.exception.exceptions;
 
 public class CustomerNotFoundException extends Exception {
     public CustomerNotFoundException(String message) {

@@ -1,10 +1,11 @@
 package ac.at.fhcampuswien.carrental.rest.controller;
 
 
-import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
+import ac.at.fhcampuswien.carrental.entity.service.JwtService;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
-import ac.at.fhcampuswien.carrental.expections.BookingFailedException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.BookingFailedException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateRequestDto;
@@ -45,17 +46,32 @@ public class RentalController {
     @NotNull
     CarRestService carRestService;
 
+    @Autowired
+    JwtService jwtService;
+
     @GetMapping("/allBookings")
-    @Operation(summary = "Lists all cars.", tags = {"Bookings"}, responses = {@ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class)))})
-    public ResponseEntity<List<Rental>> getBookings(@Valid @RequestHeader(value = "Auth") String token, HttpServletRequest request) {
+    @Operation(
+            summary = "Lists all cars.",
+            tags = {"Bookings"},
+            responses = {
+                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class)))
+            })
+    public ResponseEntity<List<Rental>> getBookings(@Valid @RequestHeader(value = "Auth") String token,
+                                                    HttpServletRequest request) {
         List<Rental> rentals = rentalRestService.getAllBookings(request);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @PostMapping("/booking")
-    @Operation(summary = "Creates a rental booking in the database.", tags = {"Rentals"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))})
-    public ResponseEntity<RentalResponseDto> createBooking(@Valid @RequestHeader(value = "Auth") String token, @RequestBody RentalRequestDto rentalBooking, HttpServletRequest request) {
-
+    @Operation(
+            summary = "Creates a rental booking in the database.",
+            tags = {"Rentals"},
+            responses = {
+                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
+            })
+    public ResponseEntity<RentalResponseDto> createBooking(@Valid @RequestHeader(value = "Auth") String token,
+                                                           @RequestBody RentalRequestDto rentalBooking,
+                                                           HttpServletRequest request) {
         try {
             RentalResponseDto rentalResponseDto = rentalRestService.createBooking(rentalBooking, request);
             return new ResponseEntity<>(rentalResponseDto, HttpStatus.CREATED);
@@ -65,8 +81,14 @@ public class RentalController {
     }
 
     @PutMapping("/booking")
-    @Operation(summary = "Update a rental booking in the database.", tags = {"Rentals"}, responses = {@ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))})
-    public ResponseEntity<RentalUpdateResponseDto> updateBooking(@Valid @RequestHeader(value = "Auth") String token, RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
+    @Operation(
+            summary = "Update a rental booking in the database.",
+            tags = {"Rentals"},
+            responses = {
+                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
+            })
+    public ResponseEntity<RentalUpdateResponseDto> updateBooking(@Valid @RequestHeader(value = "Auth") String token,
+                                                                 RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
         RentalUpdateResponseDto rentalUpdateResponseDto = rentalRestService.updateBooking(rentalUpdateRequestDto);
         return new ResponseEntity<>(rentalUpdateResponseDto, HttpStatus.OK);
     }
@@ -77,6 +99,4 @@ public class RentalController {
     public void removeBooking(@Valid @PathVariable Long bookingId) {
         rentalRestService.removeBooking(bookingId);
     }
-
-
 }

@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.carrental.expections;
+package ac.at.fhcampuswien.carrental.exception.exceptions;
 
 import ac.at.fhcampuswien.carrental.rest.models.ResponseMessageDto;
 import org.springframework.http.HttpStatus;

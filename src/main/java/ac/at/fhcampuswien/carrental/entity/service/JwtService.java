@@ -1,9 +1,7 @@
 package ac.at.fhcampuswien.carrental.entity.service;
 
-import ac.at.fhcampuswien.carrental.expections.CustomerNotFoundException;
-import ac.at.fhcampuswien.carrental.rest.models.LoginDTO;
+import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.constraints.NotNull;
@@ -51,11 +49,9 @@ public class JwtService {
         }
     }
 
-    public Boolean isTokenExpired(String token) {
-        if (extractExpiration(token).before(new Date()))
-            return true;
-        else {
-            return false;
+    public void isTokenExpired(String token) throws InvalidTokenException {
+        if (extractExpiration(token).before(new Date())) {
+            throw new InvalidTokenException("Access token is expired or not valid.");
         }
     }
 

@@ -5,7 +5,7 @@ import ac.at.fhcampuswien.carrental.entity.service.CarEntityService;
 import ac.at.fhcampuswien.carrental.entity.service.CustomerEntityService;
 import ac.at.fhcampuswien.carrental.entity.service.JwtService;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
-import ac.at.fhcampuswien.carrental.expections.BookingFailedException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.BookingFailedException;
 import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateRequestDto;
@@ -37,17 +37,16 @@ public class RentalRestService {
     public List<Rental> getAllBookings(HttpServletRequest request) {
         String accessToken = request.getHeader("Auth");
         String eMail = jwtService.extractUserEmail(accessToken);
+
         return rentalEntityService.getAllRentals(eMail);
     }
-
 
     public RentalResponseDto createBooking(RentalRequestDto rentalBooking, HttpServletRequest request) throws BookingFailedException {
         String accessToken = request.getHeader("Auth");
         String eMail = jwtService.extractUserEmail(accessToken);
+
         return rentalEntityService.createBooking(rentalBooking, eMail);
     }
-
-
 
     public RentalUpdateResponseDto updateBooking(RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
         return rentalEntityService.updateBooking(rentalUpdateRequestDto);
@@ -62,7 +61,5 @@ public class RentalRestService {
     public void removeBooking(Long id){
         rentalEntityService.deleteBooking(id);
     }
-
-
 }
 

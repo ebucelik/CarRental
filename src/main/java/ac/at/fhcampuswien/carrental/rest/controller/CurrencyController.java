@@ -1,27 +1,11 @@
 package ac.at.fhcampuswien.carrental.rest.controller;
 
-import ac.at.fhcampuswien.carrental.entity.models.Car;
-import ac.at.fhcampuswien.carrental.entity.models.Currency;
-import ac.at.fhcampuswien.carrental.expections.InvalidSessionException;
-import ac.at.fhcampuswien.carrental.rest.models.CurrencyRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
-import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Validated
 @RestController
