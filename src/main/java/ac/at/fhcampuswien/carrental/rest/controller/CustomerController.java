@@ -78,7 +78,3 @@ public class CustomerController {
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 }
-
-
-
-

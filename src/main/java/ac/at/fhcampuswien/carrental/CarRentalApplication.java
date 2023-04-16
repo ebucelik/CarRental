@@ -39,7 +39,7 @@ public class CarRentalApplication {
     private CustomerRepository customerRepository;
 
     @Autowired
-    CurrencySOAPService c;
+    CurrencySOAPService currencySOAPService;
 
     @PostConstruct
     public void initializeData() throws Exception {
@@ -65,11 +65,11 @@ public class CarRentalApplication {
         ).collect(Collectors.toList());
         customerRepository.saveAll(customers);
 
-        GetConvertedValue ex = new GetConvertedValue();
-        GetCurrencyCodes exe = new GetCurrencyCodes();
-        c.getAllCurrencies1(exe);
-        c.getAllCurrencies(ex);
+        GetConvertedValue getConvertedValue = new GetConvertedValue();
+        GetCurrencyCodes getCurrencyCodes = new GetCurrencyCodes();
 
+        currencySOAPService.getCurrencyCodes(getCurrencyCodes);
+        currencySOAPService.getConvertedValue(getConvertedValue);
     }
     public static void main(String[] args) {
         SpringApplication.run(CarRentalApplication.class, args);}
