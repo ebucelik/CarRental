@@ -70,10 +70,10 @@ public class CustomerRestService {
         checkCustomerExistence(eMail);
 
         try {
-            jwtService.isTokenExpired(token);
+            jwtService.isTokenExpiredOrInvalid(token);
 
             return token;
-        } catch(InvalidTokenException invalidTokenException) {
+        } catch(InvalidTokenException | CustomerNotFoundException exception) {
             return jwtService.generateToken(eMail);
         }
     }

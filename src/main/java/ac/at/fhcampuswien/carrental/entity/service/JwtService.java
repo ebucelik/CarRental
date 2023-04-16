@@ -1,11 +1,15 @@
 package ac.at.fhcampuswien.carrental.entity.service;
 
+import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -13,15 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Component
+@Service
 public class JwtService {
 
     //256-bit encryption for key
     public static final String SECRET = "58703273357638792F423F4528472B4B6250655368566D597133743677397A24";
 
-    @NotNull
-
-    CustomerEntityService customerEntityService;
+    @Autowired
+    CustomerRepository customerRepository;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -49,18 +52,21 @@ public class JwtService {
         }
     }
 
-    public void isTokenExpired(String token) throws InvalidTokenException {
+    public void isTokenExpiredOrInvalid(String token) throws InvalidTokenException, CustomerNotFoundException {
         if (extractExpiration(token).before(new Date())) {
-            throw new InvalidTokenException("Access token is expired or not valid.");
+            throw new InvalidTokenException("Access token is expired.");
         }
+
+        validateToken(token);
     }
 
-/*    public Boolean validateToken(String token) throws CustomerNotFoundException {
-        final String userEmail = extractUserEmail(token);
-        if (customerEntityService.checkCustomerExistance(userEmail))
-            return true;
-        throw new CustomerNotFoundException("This customers token does not exist.");
-    }*/
+    public void validateToken(String token) throws CustomerNotFoundException {
+        String userEmail = extractUserEmail(token);
+
+        if (!customerRepository.existsByeMail(userEmail)) {
+            throw new CustomerNotFoundException("Access token is invalid.");
+        }
+    }
 
     public String generateToken(String userEmail) {
         Map<String, Object> claims = new HashMap<>();
@@ -80,7 +86,6 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }
 
 
