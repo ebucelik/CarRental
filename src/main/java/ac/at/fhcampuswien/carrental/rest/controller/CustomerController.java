@@ -34,21 +34,18 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     @Autowired
     private CustomerRestService customerRestService;
-    @Autowired
-    private JwtService jwtService;
 
     @PostMapping("/auth/login")
     @Operation(
             summary = "Customer Login.",
             tags = {"Customers"},
             responses = {
-                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))),
+                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDTO.class))),
                     @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)
             })
-    public ResponseEntity<RefreshTokenDTO> login(@RequestBody @Valid LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
-        String token = customerRestService.customerLogin(loginData);
-        RefreshTokenDTO tokenResponse = new RefreshTokenDTO(token);
-        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
+        LoginResponseDTO loginResponseDTO = customerRestService.customerLogin(loginData);
+        return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/auth/registration")
@@ -72,9 +69,10 @@ public class CustomerController {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))),
                     @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)
             })
-    public ResponseEntity<RefreshTokenDTO> refreshToken(@RequestBody @Valid RefreshTokenDTO token) throws CustomerNotFoundException, InvalidTokenException {
-        String refreshedToken = customerRestService.refreshAccessToken(token);
-        RefreshTokenDTO tokenResponse = new RefreshTokenDTO(refreshedToken);
-        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(@RequestBody @Valid RefreshTokenDTO token) throws InvalidTokenException, CustomerNotFoundException {
+        String accessToken = customerRestService.refreshAccessToken(token);
+        RefreshTokenResponseDTO refreshTokenResponseDTO = new RefreshTokenResponseDTO(accessToken);
+
+        return new ResponseEntity<>(refreshTokenResponseDTO, HttpStatus.OK);
     }
 }

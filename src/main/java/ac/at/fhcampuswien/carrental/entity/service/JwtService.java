@@ -26,6 +26,11 @@ public class JwtService {
     @Autowired
     CustomerRepository customerRepository;
 
+    public enum Token {
+        AccessToken,
+        RefreshToken
+    }
+
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -54,7 +59,7 @@ public class JwtService {
 
     public void isTokenExpiredOrInvalid(String token) throws InvalidTokenException, CustomerNotFoundException {
         if (extractExpiration(token).before(new Date())) {
-            throw new InvalidTokenException("Access token is expired.");
+            throw new InvalidTokenException("Token is expired.");
         }
 
         validateToken(token);
@@ -64,21 +69,27 @@ public class JwtService {
         String userEmail = extractUserEmail(token);
 
         if (!customerRepository.existsByeMail(userEmail)) {
-            throw new CustomerNotFoundException("Access token is invalid.");
+            throw new CustomerNotFoundException("Token is invalid.");
         }
     }
 
-    public String generateToken(String userEmail) {
+    public String generateToken(String userEmail, Token token) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userEmail);
+        return createToken(claims, userEmail, token);
     }
 
-    private String createToken(Map<String, Object> claims, String userEmail) {
+    private String createToken(Map<String, Object> claims, String userEmail, Token token) {
+        int expirationTimeInMillis = 0;
+
+        switch(token) {
+            case AccessToken -> expirationTimeInMillis = 60;
+            case RefreshToken -> expirationTimeInMillis = 60 * 60 * 24;
+        }
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) //token valid for 30 Minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expirationTimeInMillis)) //token valid for 30 Minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
