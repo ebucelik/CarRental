@@ -11,13 +11,12 @@ import java.util.List;
 
 
 @Data
-@Builder
 @Setter
 @Getter
 public class CurrencyResponseDto {
 
     @NotBlank
     @NotEmpty
-    List<String> exchangeRates;
+    private List<String> currencyCodes;
 }
 
