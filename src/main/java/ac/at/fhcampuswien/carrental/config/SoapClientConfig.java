@@ -52,7 +52,14 @@ public class SoapClientConfig {
     @Bean
     public Jaxb2Marshaller marshaller(){
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-        jaxb2Marshaller.setClassesToBeBound(GetConvertedValue.class, GetConvertedValueResponse.class, GetCurrencyCodes.class, GetCurrencyCodesResponse.class, StringArray.class);
+        jaxb2Marshaller.setClassesToBeBound(
+                GetConvertedValue.class,
+                GetConvertedValueResponse.class,
+                GetCurrencyCodes.class,
+                GetCurrencyCodesResponse.class,
+                StringArray.class
+        );
+
         return jaxb2Marshaller;
     }
 

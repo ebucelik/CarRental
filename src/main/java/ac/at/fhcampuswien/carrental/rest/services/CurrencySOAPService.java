@@ -25,7 +25,7 @@ public class CurrencySOAPService {
     }
 
 
-/*    public void getAllCurrencies(GetConvertedValue ex) throws Exception {
+    public void getAllCurrencies(GetConvertedValue ex) throws Exception {
 
         GetConvertedValueResponse n = currencyClient.getCurrencyValue(ex);
        System.out.print(n.getGetConvertedValueResult().toString());
@@ -36,7 +36,7 @@ public class CurrencySOAPService {
         for (String x: n.getGetCurrencyCodesResult().getString()) {
             System.out.println("Value: " + x);
         }
-    }*/
+    }
 
 
     //ToDO this have to be refacored in one file
