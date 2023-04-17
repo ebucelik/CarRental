@@ -1,4 +1,4 @@
-package ac.at.fhcampuswien.carrental.entity.service;
+package ac.at.fhcampuswien.carrental.rest.services;
 
 import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
@@ -82,7 +82,7 @@ public class JwtService {
         int expirationTimeInMillis = 0;
 
         switch(token) {
-            case AccessToken -> expirationTimeInMillis = 60;
+            case AccessToken -> expirationTimeInMillis = 60 * 60;
             case RefreshToken -> expirationTimeInMillis = 60 * 60 * 24;
         }
         return Jwts.builder()

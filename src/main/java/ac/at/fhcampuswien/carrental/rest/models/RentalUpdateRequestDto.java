@@ -31,6 +31,14 @@ public class RentalUpdateRequestDto {
     @NotEmpty
     private LocalDate endDay;
 
+    @NotBlank
+    @NotEmpty
+    private float totalCost;
+
+    @NotBlank
+    @NotEmpty
+    private String currentCurrency;
+
 
 
 }

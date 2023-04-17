@@ -3,7 +3,6 @@ package ac.at.fhcampuswien.carrental.rest.services;
 import ac.at.fhcampuswien.carrental.entity.helper.Hashing;
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.service.CustomerEntityService;
-import ac.at.fhcampuswien.carrental.entity.service.JwtService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidPasswordException;

@@ -1,5 +1,6 @@
 package ac.at.fhcampuswien.carrental.rest.mapper;
 
+import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
 import ac.at.fhcampuswien.carrental.rest.models.*;
@@ -57,6 +58,20 @@ public class UserMapper {
                 .startDay(rentalUpdate.getStartDay())
                 .endDay(rentalUpdate.getEndDay())
                 .totalCost(rentalUpdate.getTotalCost())
+                .build();
+    }
+
+    public CarListDTO carToDisplayList(Car car, float dailyCostConverted, float totalCost){
+        return CarListDTO.builder()
+                .id(car.getId())
+                .dailyCost(dailyCostConverted)
+                .brand(car.getBrand())
+                .model(car.getModel())
+                .hp(car.getHp())
+                .buildDate(car.getBuildDate())
+                .fuelType(car.getFuelType())
+                .imageLink(car.getImageLink())
+                .totalCosts(totalCost)
                 .build();
     }
 }

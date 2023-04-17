@@ -15,4 +15,5 @@ public class RentalRequestDto {
     private LocalDate startDay;
     private LocalDate endDay;
     private float totalCost;
+    private String currentCurrency;
 }

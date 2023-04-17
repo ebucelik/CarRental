@@ -2,10 +2,9 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
-import ac.at.fhcampuswien.carrental.entity.service.JwtService;
+import ac.at.fhcampuswien.carrental.rest.services.JwtService;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.BookingFailedException;
-import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
 import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateRequestDto;
@@ -34,7 +33,7 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("api/v1")
-@Tag(name = "Booking", description = "Endpoints for managing bookings.")
+@Tag(name = "Bookings", description = "Endpoints for managing bookings.")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RentalController {
 
@@ -51,21 +50,22 @@ public class RentalController {
 
     @GetMapping("/allBookings")
     @Operation(
-            summary = "Lists all cars.",
+            summary = "Lists all bookings.",
             tags = {"Bookings"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class)))
             })
     public ResponseEntity<List<Rental>> getBookings(@Valid @RequestHeader(value = "Auth") String token,
-                                                    HttpServletRequest request) {
-        List<Rental> rentals = rentalRestService.getAllBookings(request);
+                                                    @RequestParam String currentCurrency,
+                                                    HttpServletRequest request) throws Exception {
+        List<Rental> rentals = rentalRestService.getAllBookings(request, currentCurrency);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
 
     @PostMapping("/booking")
     @Operation(
-            summary = "Creates a rental booking in the database.",
-            tags = {"Rentals"},
+            summary = "Creates a booking in the database.",
+            tags = {"Bookings"},
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
             })
@@ -77,26 +77,28 @@ public class RentalController {
             return new ResponseEntity<>(rentalResponseDto, HttpStatus.CREATED);
         } catch (BookingFailedException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     @PutMapping("/booking")
     @Operation(
-            summary = "Update a rental booking in the database.",
-            tags = {"Rentals"},
+            summary = "Update a booking in the database.",
+            tags = {"Bookings"},
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
             })
     public ResponseEntity<RentalUpdateResponseDto> updateBooking(@Valid @RequestHeader(value = "Auth") String token,
-                                                                 RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
+                                                                 RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService, Exception {
         RentalUpdateResponseDto rentalUpdateResponseDto = rentalRestService.updateBooking(rentalUpdateRequestDto);
         return new ResponseEntity<>(rentalUpdateResponseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{bookingId}")
-    @Operation(summary = "Delete rental entry from database.", tags = {"Rentals"})
+    @DeleteMapping("/booking/{bookingId}")
+    @Operation(summary = "Delete booking entry from database.", tags = {"Bookings"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeBooking(@Valid @PathVariable Long bookingId) {
+    public void removeBooking(@Valid @RequestHeader(value = "Auth") String token, @Valid @PathVariable Long bookingId) {
         rentalRestService.removeBooking(bookingId);
     }
 }

@@ -1,7 +1,6 @@
 package ac.at.fhcampuswien.carrental.rest.controller;
 
 
-import ac.at.fhcampuswien.carrental.entity.service.JwtService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidPasswordException;
@@ -64,7 +63,7 @@ public class CustomerController {
     @PostMapping("/auth/refreshtoken")
     @Operation(
             summary = "Refresh access token.",
-            tags = {"JWT"},
+            tags = {"Customers"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))),
                     @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)

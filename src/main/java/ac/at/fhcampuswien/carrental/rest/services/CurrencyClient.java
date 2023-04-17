@@ -1,5 +1,5 @@
 
-package ac.at.fhcampuswien.carrental.config;
+package ac.at.fhcampuswien.carrental.rest.services;
 
 import ac.at.fhcampuswien.carrental.wsdl.*;
 import jakarta.validation.constraints.NotNull;
@@ -54,10 +54,6 @@ public class CurrencyClient{
     }
 
     public GetConvertedValueResponse getCurrencyValue(GetConvertedValue getConvertedValue) throws Exception {
-        getConvertedValue.setCurrentValue(20f);
-        getConvertedValue.setCurrentCurrencyCode("EUR");
-        getConvertedValue.setExpectedCurrencyCode("GBP");
-
         template = new WebServiceTemplate(marshaller);
         template.setDefaultUri(URI);
 

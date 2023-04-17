@@ -3,6 +3,7 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
+import ac.at.fhcampuswien.carrental.rest.models.CarListDTO;
 import ac.at.fhcampuswien.carrental.rest.services.CarRestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,33 +36,20 @@ public class CarController {
     @Autowired
     private CarRestService carRestService;
 
-    @GetMapping("/allCars")
+    @GetMapping("/availableCars")
     @Operation(
-            summary = "Lists all cars.",
+            summary = "Lists all available cars.",
             tags = {"Cars"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
                     @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)
             })
-    public ResponseEntity<List<Car>> getAllCars(@Valid @RequestHeader(value = "Auth") String token,
-                                                @RequestParam("currency") String currency) {
-        List<Car> allAvailableCars = carRestService.getAllCars(currency);
-        return ResponseEntity.ok(allAvailableCars);
-    }
-
-    @GetMapping("/availableCars")
-    @Operation(
-            summary = "Lists all available cars.",
-            tags = { "Cars" },
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
-                    @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)
-            })
-    public ResponseEntity<List<Car>> listAvailableCars(@Valid @RequestHeader(value = "Auth") String token,
-                                                       @RequestParam("currency") String currency,
-                                                       @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                                       @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
-        List<Car> allAvailableCars = carRestService.getAvailableCars(currency, from, to);
+    public ResponseEntity<List<CarListDTO>> listAvailableCars(@Valid @RequestHeader(value = "Auth") String token,
+                                                              @RequestParam("currentCurrency") String currentCurrency,
+                                                              @RequestParam("chosenCurrency") String chosenCurrency,
+                                                              @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+                                                              @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) throws Exception {
+        List<CarListDTO> allAvailableCars = carRestService.getAvailableCars(currentCurrency, chosenCurrency, from, to);
         return new ResponseEntity<>(allAvailableCars, HttpStatus.OK);
     }
 }

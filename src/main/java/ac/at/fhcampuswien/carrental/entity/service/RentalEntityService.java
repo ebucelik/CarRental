@@ -63,7 +63,7 @@ public class RentalEntityService extends Throwable {
     public RentalUpdateResponseDto updateBooking(RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService {
        try{
            Rental rentalUpdate = rentalRepository.updateRental(rentalUpdateRequestDto.getCarId(), rentalUpdateRequestDto.getStartDay(),
-                   rentalUpdateRequestDto.getEndDay(), 20f, rentalUpdateRequestDto.getId());
+                   rentalUpdateRequestDto.getEndDay(), rentalUpdateRequestDto.getTotalCost(), rentalUpdateRequestDto.getId());
            return userMapper.RentalToUpdateResponse(rentalUpdate);
        } catch(DataAccessException ex){
 

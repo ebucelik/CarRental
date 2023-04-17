@@ -1,16 +1,11 @@
 package ac.at.fhcampuswien.carrental.rest.services;
 
-import ac.at.fhcampuswien.carrental.config.CurrencyClient;
-import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
 import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
-import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValueResponse;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
-import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
