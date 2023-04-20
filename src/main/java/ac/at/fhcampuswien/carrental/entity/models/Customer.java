@@ -29,7 +29,6 @@ public class Customer {
     //private UUID session;
     private String phoneNumber;
     private String dateOfBirth;
-    private String customerChosenCurrency;
 
     public Customer(String eMail, String firstName, String lastName, String password, String phoneNumber, String dateOfBirth) {
         this.eMail = eMail;

@@ -2,6 +2,8 @@ package ac.at.fhcampuswien.carrental.rest.services;
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.service.CarEntityService;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
 import ac.at.fhcampuswien.carrental.rest.mapper.UserMapper;
 import ac.at.fhcampuswien.carrental.rest.models.CarListDTO;
 import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
@@ -33,16 +35,11 @@ public class CarRestService {
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
 
-    public List<CarListDTO> getAvailableCars(String currentCurrency, String chosenCurrency, LocalDate from, LocalDate to) throws Exception {
+    public List<CarListDTO> getAvailableCars(String currentCurrency, String chosenCurrency, LocalDate from, LocalDate to) throws CarNotAvailableException, CurrencyServiceNotAvailableException {
         List<CarListDTO> carsToDisplay = new ArrayList<>();
         int bookingDays = (int) DAYS.between(from, to) + 1;
         List<Car> availableCars = carEntityService.getFreeCarsBetweenDates(from, to);
-
-        GetConvertedValue getConvertedValue = new GetConvertedValue();
-        getConvertedValue.setCurrentValue(1f);
-        getConvertedValue.setCurrentCurrencyCode(currentCurrency);
-        getConvertedValue.setExpectedCurrencyCode(chosenCurrency);
-        Double exchangeRate = currencySOAPService.getConvertedValue(getConvertedValue);
+        double exchangeRate = getExchangeRate(currentCurrency, chosenCurrency);
 
         for (Car c: availableCars) {
             float dailyCoastConverted = (float) (c.getDailyCost() * exchangeRate);
@@ -56,14 +53,18 @@ public class CarRestService {
         return carsToDisplay;
     }
 
-    public List<Car> getAllCars(String currency) {
-        return carEntityService.getAllCars();
-    }
-
-    private float formatCosts(float costs){
+    private float formatCosts(float costs) {
         String formatDaily = df.format(costs);
         String replacedDaily = formatDaily.replace(",", ".");
         return Float.parseFloat(replacedDaily);
+    }
+
+    public Double getExchangeRate(String currentCurrency, String chosenCurrency) throws CurrencyServiceNotAvailableException {
+        GetConvertedValue getConvertedValue = new GetConvertedValue();
+        getConvertedValue.setCurrentValue(1f);
+        getConvertedValue.setCurrentCurrencyCode(currentCurrency);
+        getConvertedValue.setExpectedCurrencyCode(chosenCurrency);
+        return currencySOAPService.getConvertedValue(getConvertedValue);
     }
 }
 

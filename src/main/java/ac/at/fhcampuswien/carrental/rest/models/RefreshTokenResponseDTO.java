@@ -1,13 +1,14 @@
 package ac.at.fhcampuswien.carrental.rest.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RefreshTokenResponseDTO {
     private String accessToken;
 
-    public RefreshTokenResponseDTO(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }
 

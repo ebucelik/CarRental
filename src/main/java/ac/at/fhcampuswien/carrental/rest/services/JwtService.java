@@ -61,7 +61,6 @@ public class JwtService {
         if (extractExpiration(token).before(new Date())) {
             throw new InvalidTokenException("Token is expired.");
         }
-
         validateToken(token);
     }
 

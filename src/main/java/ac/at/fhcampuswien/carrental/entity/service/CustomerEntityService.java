@@ -32,10 +32,10 @@ public class CustomerEntityService {
         return customerRepository.findByeMail(email);
     }
 
-    public RegistrationResponseDto addCustomer(RegistrationRequestDto customerDto) throws CustomerAlreadyExistsException {
-        checkCustomerExistence(customerDto.getEMail());
+    public RegistrationResponseDto addCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
+        checkCustomerExistence(registrationRequestDto.getEMail());
 
-        Customer customer = userMapper.requestMapping(customerDto);
+        Customer customer = userMapper.requestMapping(registrationRequestDto);
         Customer dbResponse = customerRepository.save(customer);
 
         return userMapper.responseMapping(dbResponse);

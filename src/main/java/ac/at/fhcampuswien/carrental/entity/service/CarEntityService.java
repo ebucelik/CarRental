@@ -3,6 +3,7 @@ package ac.at.fhcampuswien.carrental.entity.service;
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.repository.CarRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,19 +22,15 @@ public class CarEntityService {
     CarRepository carRepository;
     RentalRepository rentalRepository;
 
-    public List<Car> getFreeCarsBetweenDates(LocalDate from, LocalDate to) {
+    public List<Car> getFreeCarsBetweenDates(LocalDate from, LocalDate to) throws CarNotAvailableException {
 
         List<Long> availableCarIDs = rentalRepository.findAllAvailableCarsBetweenDates(from, to);
-        List<Car> allAvailableCars = carRepository.findAllById(availableCarIDs);
+        List<Car> allAvailableCars = carRepository.findCarsNotInList(availableCarIDs);
+        if (allAvailableCars.isEmpty()) {
+            throw new CarNotAvailableException("Cars not available");
+        }
         return allAvailableCars;
     }
-
-    public List<Car> getAllCars() {
-        List<Car> allCars = carRepository.findAll();
-        return allCars;
-    }
-
-
 
 
 }

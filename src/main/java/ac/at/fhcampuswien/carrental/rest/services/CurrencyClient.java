@@ -1,6 +1,7 @@
 
 package ac.at.fhcampuswien.carrental.rest.services;
 
+import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
 import ac.at.fhcampuswien.carrental.wsdl.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,11 @@ public class CurrencyClient{
 
     private final String basicAuth = "Basic 1101bf5c602959307750538c2f57b5d359b5eb66ed13623b814aafead8038ebf";
 
-    public GetCurrencyCodesResponse getCurrencyResponse(GetCurrencyCodes getCurrencyCodes) throws Exception {
+    public GetCurrencyCodesResponse getCurrencyResponse(GetCurrencyCodes getCurrencyCodes) throws CurrencyServiceNotAvailableException {
         template = new WebServiceTemplate(marshaller);
         template.setDefaultUri(URI);
 
-        return (GetCurrencyCodesResponse) template.marshalSendAndReceive(getCurrencyCodes, new WebServiceMessageCallback() {
+        GetCurrencyCodesResponse response = (GetCurrencyCodesResponse) template.marshalSendAndReceive(getCurrencyCodes, new WebServiceMessageCallback() {
             @Override
             public void doWithMessage(WebServiceMessage message) throws IOException, TransformerException {
                 SoapMessage soapMessage = (SoapMessage) message;
@@ -51,22 +52,31 @@ public class CurrencyClient{
                 transformer.transform(headerSource, soapHeader.getResult());
             }
         });
+
+        if(response == null){
+            throw new CurrencyServiceNotAvailableException("Currency Service not available!");
+        }
+        return response;
     }
 
-    public GetConvertedValueResponse getCurrencyValue(GetConvertedValue getConvertedValue) throws Exception {
+    public GetConvertedValueResponse getCurrencyValue(GetConvertedValue getConvertedValue) throws CurrencyServiceNotAvailableException {
         template = new WebServiceTemplate(marshaller);
         template.setDefaultUri(URI);
 
-        return (GetConvertedValueResponse) template.marshalSendAndReceive(getConvertedValue, message -> {
+        GetConvertedValueResponse response = (GetConvertedValueResponse) template.marshalSendAndReceive(getConvertedValue, message -> {
             SoapMessage soapMessage = (SoapMessage) message;
             SoapHeader soapHeader = soapMessage.getSoapHeader();
             StringSource headerSource = new StringSource("<cur:RequestHeader xmlns:cur=\"currencyconverter.ac.at.fhcampuswien\">\n" +
                     "<cur:authentication>" + basicAuth + "</cur:authentication>\n" +
                     "</cur:RequestHeader>"
             );
-
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.transform(headerSource, soapHeader.getResult());
         });
+
+        if(response == null){
+            throw new CurrencyServiceNotAvailableException("Currency Service not available!");
+        }
+        return response;
     }
 }

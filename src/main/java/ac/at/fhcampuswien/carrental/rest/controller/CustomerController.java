@@ -10,6 +10,7 @@ import ac.at.fhcampuswien.carrental.rest.services.CustomerRestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("api/v1/users/")
+@RequestMapping("api/v1/customers/")
 @Tag(name = "Customers", description = "Endpoints for managing customers")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerController {
@@ -40,7 +41,7 @@ public class CustomerController {
             tags = {"Customers"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDTO.class))),
-                    @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)
+                    @ApiResponse(description = "Email or password is incorrect.", responseCode = "400", content = @Content)
             })
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
         LoginResponseDTO loginResponseDTO = customerRestService.customerLogin(loginData);
@@ -55,7 +56,7 @@ public class CustomerController {
                     @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RegistrationResponseDto.class))),
                     @ApiResponse(description = "Customer already Exists", responseCode = "409", content = @Content)
             })
-    public ResponseEntity<RegistrationResponseDto> register(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException, MethodArgumentNotValidException {
+    public ResponseEntity<RegistrationResponseDto> register(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
         RegistrationResponseDto registrationResponseDto = customerRestService.createCustomer(registrationRequestDto);
         return new ResponseEntity<>(registrationResponseDto, HttpStatus.CREATED);
     }
@@ -66,12 +67,11 @@ public class CustomerController {
             tags = {"Customers"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))),
-                    @ApiResponse(description = "User or password not correct", responseCode = "401", content = @Content)
+                    @ApiResponse(description = "Invalid Token", responseCode = "401", content = @Content)
             })
     public ResponseEntity<RefreshTokenResponseDTO> refreshToken(@RequestBody @Valid RefreshTokenDTO token) throws InvalidTokenException, CustomerNotFoundException {
         String accessToken = customerRestService.refreshAccessToken(token);
         RefreshTokenResponseDTO refreshTokenResponseDTO = new RefreshTokenResponseDTO(accessToken);
-
         return new ResponseEntity<>(refreshTokenResponseDTO, HttpStatus.OK);
     }
 }
