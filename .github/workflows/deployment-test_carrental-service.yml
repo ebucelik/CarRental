@@ -50,4 +50,4 @@ jobs:
           app-name: 'carrental-service'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB3E077F38CB4F3C9C275968703E3D67 }}
-          package: '${{ github.workspace }}/target/*.jar'
+          package: '${{ github.workspace }}/*.jar'
