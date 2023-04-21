@@ -22,13 +22,17 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven
-        run: ./gradlew clean build
+        run: ./gradlew clean build --build-dir="${{ github.workspace }}/build" --no-daemon
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
           path: '${{ github.workspace }}/build/libs/*.jar'
+          
+      - name: List contents of build/libs directory
+        run: ls -R ${{ github.workspace }}/build/libs
+      
 
   deploy:
     runs-on: windows-latest
