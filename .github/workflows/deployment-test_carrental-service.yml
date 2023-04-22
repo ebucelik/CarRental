@@ -37,8 +37,8 @@ jobs:
             res.data.artifacts
             .forEach(({ id }) => {
               github.rest.actions.deleteArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner: marjanom,
+                repo: CarRental,
                 artifact_id: id,
               })
             })
