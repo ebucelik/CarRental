@@ -1,16 +1,11 @@
 package ac.at.fhcampuswien.carrental;
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
-import ac.at.fhcampuswien.carrental.entity.models.Customer;
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
 import ac.at.fhcampuswien.carrental.entity.repository.CarRepository;
-import ac.at.fhcampuswien.carrental.entity.repository.CustomerRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.rest.services.CurrencyClient;
 import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
-import ac.at.fhcampuswien.carrental.rest.services.SOAPCacheService;
-import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
-import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import jakarta.annotation.PostConstruct;
@@ -18,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +22,7 @@ import java.util.stream.Stream;
 
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Carrental API", version = "0.1"))
+@OpenAPIDefinition(info = @Info(title = "Carrental API", version = "1.0"))
 public class CarRentalApplication {
 
     @Autowired
@@ -35,10 +31,6 @@ public class CarRentalApplication {
     @Autowired
     @NotNull
     private CarRepository carRepository;
-
-    @Autowired
-    @NotNull
-    private CustomerRepository customerRepository;
 
     @Autowired
     CurrencySOAPService currencySOAPService;
@@ -58,17 +50,12 @@ public class CarRentalApplication {
         carRepository.saveAll(cars);
 
         List<Rental> rentals = Stream.of(
-                new Rental(1001L, 5001L, 1L, LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 10), 100),
-                new Rental(1002L, 5001L, 2L, LocalDate.of(2023, 01, 05), LocalDate.of(2023, 01, 15), 100),
-                new Rental(1003L, 5001L, 3L, LocalDate.of(2023, 02, 01), LocalDate.of(2023, 02, 10), 100)
+                new Rental(1L, 1L, 1L, LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 10), 100),
+                new Rental(2L, 2L, 2L, LocalDate.of(2023, 01, 05), LocalDate.of(2023, 01, 15), 100),
+                new Rental(3L, 3L, 3L, LocalDate.of(2023, 02, 01), LocalDate.of(2023, 02, 10), 100)
         ).collect(Collectors.toList());
         rentalRepository.saveAll(rentals);
 
-        List<Customer> customers = Stream.of(
-                new Customer("jt@.com", "Jonny", "Test", "Apfel", "123456789", "2000-01-01"),
-                new Customer("jt2@.com", "Jenny", "Test", "Apfel2", "123456789", "2000-01-01")
-        ).collect(Collectors.toList());
-        customerRepository.saveAll(customers);
     }
 
     public static void main(String[] args) {

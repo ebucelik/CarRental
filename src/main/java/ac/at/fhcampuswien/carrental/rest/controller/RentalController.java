@@ -2,6 +2,9 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
+import ac.at.fhcampuswien.carrental.exception.exceptions.BookingNotFoundException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
 import ac.at.fhcampuswien.carrental.rest.services.JwtService;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.BookingFailedException;
@@ -41,23 +44,17 @@ public class RentalController {
     @NotNull
     RentalRestService rentalRestService;
 
-    @Autowired
-    @NotNull
-    CarRestService carRestService;
-
-    @Autowired
-    JwtService jwtService;
-
     @GetMapping("/allBookings")
     @Operation(
             summary = "Lists all bookings.",
             tags = {"Bookings"},
             responses = {
-                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class)))
+                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))),
+                    @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
     public ResponseEntity<List<Rental>> getBookings(@Valid @RequestHeader(value = "Auth") String token,
                                                     @RequestParam String currentCurrency,
-                                                    HttpServletRequest request) throws Exception {
+                                                    HttpServletRequest request) throws CurrencyServiceNotAvailableException {
         List<Rental> rentals = rentalRestService.getAllBookings(request, currentCurrency);
         return new ResponseEntity<>(rentals, HttpStatus.OK);
     }
@@ -67,19 +64,15 @@ public class RentalController {
             summary = "Creates a booking in the database.",
             tags = {"Bookings"},
             responses = {
-                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
+                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class))),
+                    @ApiResponse(description = "This Car is not available in this time period!", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
     public ResponseEntity<RentalResponseDto> createBooking(@Valid @RequestHeader(value = "Auth") String token,
                                                            @RequestBody RentalRequestDto rentalBooking,
-                                                           HttpServletRequest request) {
-        try {
+                                                           HttpServletRequest request) throws CarNotAvailableException, CurrencyServiceNotAvailableException {
             RentalResponseDto rentalResponseDto = rentalRestService.createBooking(rentalBooking, request);
             return new ResponseEntity<>(rentalResponseDto, HttpStatus.CREATED);
-        } catch (BookingFailedException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PutMapping("/booking")
@@ -87,10 +80,12 @@ public class RentalController {
             summary = "Update a booking in the database.",
             tags = {"Bookings"},
             responses = {
-                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class)))
+                    @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class))),
+                    @ApiResponse(description = "Booking with this ID does not exist!", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
     public ResponseEntity<RentalUpdateResponseDto> updateBooking(@Valid @RequestHeader(value = "Auth") String token,
-                                                                 RentalUpdateRequestDto rentalUpdateRequestDto) throws RentalEntityService, Exception {
+                                                                 RentalUpdateRequestDto rentalUpdateRequestDto) throws CurrencyServiceNotAvailableException, BookingNotFoundException {
         RentalUpdateResponseDto rentalUpdateResponseDto = rentalRestService.updateBooking(rentalUpdateRequestDto);
         return new ResponseEntity<>(rentalUpdateResponseDto, HttpStatus.OK);
     }

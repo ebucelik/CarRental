@@ -3,7 +3,9 @@ package ac.at.fhcampuswien.carrental.rest.services;
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.service.CarEntityService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
+import ac.at.fhcampuswien.carrental.rest.mapper.CarMapper;
 import ac.at.fhcampuswien.carrental.rest.mapper.UserMapper;
 import ac.at.fhcampuswien.carrental.rest.models.CarListDTO;
 import ac.at.fhcampuswien.carrental.wsdl.GetConvertedValue;
@@ -31,7 +33,7 @@ public class CarRestService {
     CurrencySOAPService currencySOAPService;
 
     @Autowired
-    UserMapper userMapper;
+    CarMapper carMapper;
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
 
@@ -41,16 +43,20 @@ public class CarRestService {
         List<Car> availableCars = carEntityService.getFreeCarsBetweenDates(from, to);
         double exchangeRate = getExchangeRate(currentCurrency, chosenCurrency);
 
-        for (Car c: availableCars) {
-            float dailyCoastConverted = (float) (c.getDailyCost() * exchangeRate);
-            float totalCost = (float) (dailyCoastConverted * bookingDays);
-            float dailyCostFormatted = formatCosts(dailyCoastConverted);
+        for (Car c : availableCars) {
+            float dailyCostConverted = (float) (c.getDailyCost() * exchangeRate);
+            float totalCost = (float) (dailyCostConverted * bookingDays);
+            float dailyCostFormatted = formatCosts(dailyCostConverted);
             float totalCostFormatted = formatCosts(totalCost);
 
-            CarListDTO carWithTotalCost = userMapper.carToDisplayList(c, dailyCostFormatted, totalCostFormatted);
-            carsToDisplay.add(carWithTotalCost);
+            CarListDTO carsWithTotalCost = carMapper.carToDisplayList(c, dailyCostFormatted, totalCostFormatted);
+            carsToDisplay.add(carsWithTotalCost);
         }
         return carsToDisplay;
+    }
+
+    public Car getSpecificCar(long id) throws CarNotFoundException {
+        return carEntityService.getCarById(id);
     }
 
     private float formatCosts(float costs) {
@@ -60,10 +66,7 @@ public class CarRestService {
     }
 
     public Double getExchangeRate(String currentCurrency, String chosenCurrency) throws CurrencyServiceNotAvailableException {
-        GetConvertedValue getConvertedValue = new GetConvertedValue();
-        getConvertedValue.setCurrentValue(1f);
-        getConvertedValue.setCurrentCurrencyCode(currentCurrency);
-        getConvertedValue.setExpectedCurrencyCode(chosenCurrency);
+        GetConvertedValue getConvertedValue = new GetConvertedValue(1f, currentCurrency, chosenCurrency);
         return currencySOAPService.getConvertedValue(getConvertedValue);
     }
 }

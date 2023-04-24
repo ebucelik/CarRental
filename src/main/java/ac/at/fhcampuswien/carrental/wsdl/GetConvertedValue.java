@@ -10,6 +10,8 @@ package ac.at.fhcampuswien.carrental.wsdl;
 
 
 import jakarta.xml.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -41,6 +43,8 @@ import jakarta.xml.bind.annotation.*;
     "currentCurrencyCode",
     "expectedCurrencyCode"
 })
+@AllArgsConstructor
+@NoArgsConstructor
 public class GetConvertedValue {
 
     @jakarta.xml.bind.annotation.XmlElement(name = "current_value", namespace = "currencyconverter.ac.at.fhcampuswien")

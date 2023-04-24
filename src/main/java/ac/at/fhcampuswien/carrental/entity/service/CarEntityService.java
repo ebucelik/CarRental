@@ -4,6 +4,7 @@ import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.repository.CarRepository;
 import ac.at.fhcampuswien.carrental.entity.repository.RentalRepository;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,11 +26,20 @@ public class CarEntityService {
     public List<Car> getFreeCarsBetweenDates(LocalDate from, LocalDate to) throws CarNotAvailableException {
 
         List<Long> availableCarIDs = rentalRepository.findAllAvailableCarsBetweenDates(from, to);
+        if(availableCarIDs.isEmpty()) availableCarIDs.add(0l);
         List<Car> allAvailableCars = carRepository.findCarsNotInList(availableCarIDs);
         if (allAvailableCars.isEmpty()) {
-            throw new CarNotAvailableException("Cars not available");
+            throw new CarNotAvailableException("No cars available in this time period");
         }
         return allAvailableCars;
+    }
+
+    public Car getCarById(long id) throws CarNotFoundException {
+        Car car = carRepository.getCarById(id);
+        if(car == null){
+            throw new CarNotFoundException("The Car with this ID could not be found!");
+        }
+        return car;
     }
 
 

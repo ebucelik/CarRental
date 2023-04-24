@@ -54,7 +54,7 @@ public class CustomerController {
             tags = {"Customers"},
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RegistrationResponseDto.class))),
-                    @ApiResponse(description = "Customer already Exists", responseCode = "409", content = @Content)
+                    @ApiResponse(description = "A user for this email is already existing. Please try to log in.", responseCode = "409", content = @Content)
             })
     public ResponseEntity<RegistrationResponseDto> register(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
         RegistrationResponseDto registrationResponseDto = customerRestService.createCustomer(registrationRequestDto);

@@ -23,10 +23,8 @@ public class Customer {
     private String eMail;
     private String firstName;
     private String lastName;
-
     private byte[] password;
     private byte[] salt;
-    //private UUID session;
     private String phoneNumber;
     private String dateOfBirth;
 

@@ -14,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerEntityService {
@@ -28,7 +27,7 @@ public class CustomerEntityService {
         }
     }
 
-    public Customer findCustomer(String email){
+    public Customer findCustomer(String email) {
         return customerRepository.findByeMail(email);
     }
 

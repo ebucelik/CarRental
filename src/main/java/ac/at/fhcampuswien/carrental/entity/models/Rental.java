@@ -16,7 +16,6 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 public class Rental {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
