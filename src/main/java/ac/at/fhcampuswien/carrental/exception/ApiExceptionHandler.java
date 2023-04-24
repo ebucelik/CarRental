@@ -1,9 +1,7 @@
 package ac.at.fhcampuswien.carrental.exception;
 
-import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerAlreadyExistsException;
-import ac.at.fhcampuswien.carrental.exception.exceptions.CustomerNotFoundException;
-import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidPasswordException;
-import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.*;
+import ac.at.fhcampuswien.carrental.rest.models.ResponseMessageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -46,7 +44,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ApiException> handleCustomerNotFoundException(CustomerNotFoundException customerNotFoundException) {
-        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
         ApiException apiException = new ApiException(
                 customerNotFoundException.getMessage(),
@@ -67,6 +65,55 @@ public class ApiExceptionHandler {
                 timestamp
         );
 
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(CurrencyServiceNotAvailableException.class)
+    public ResponseEntity<?> handleSOAPServiceConnectionError(CurrencyServiceNotAvailableException currencyServiceNotAvailableException) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        ApiException apiException = new ApiException(
+                currencyServiceNotAvailableException.getMessage(),
+                httpStatus,
+                timestamp
+        );
+
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(CarNotAvailableException.class)
+    public ResponseEntity<?> handleCarNotAvailablenError(CarNotAvailableException carNotAvailableException) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                carNotAvailableException.getMessage(),
+                httpStatus,
+                timestamp
+        );
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<?> handleCarNotFoundError(CarNotFoundException carNotFoundException) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                carNotFoundException.getMessage(),
+                httpStatus,
+                timestamp
+        );
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<?> handleBookingNotFoundError(BookingNotFoundException bookingNotFoundException) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                bookingNotFoundException.getMessage(),
+                httpStatus,
+                timestamp
+        );
         return new ResponseEntity<>(apiException, httpStatus);
     }
 }

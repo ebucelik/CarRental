@@ -30,25 +30,19 @@ public class CustomerRestService {
 
     public LoginResponseDTO customerLogin(LoginDTO loginData) throws InvalidPasswordException, CustomerNotFoundException {
         Customer customer = checkCustomerExistence(loginData.getEMail());
-
         checkPassword(loginData.getPassword(), customer);
 
         String accessToken = jwtService.generateToken(loginData.getEMail(), JwtService.Token.AccessToken);
         String refreshToken = jwtService.generateToken(loginData.getEMail(), JwtService.Token.RefreshToken);
 
-        return new LoginResponseDTO(
-                accessToken,
-                refreshToken
-        );
+        return new LoginResponseDTO(accessToken, refreshToken);
     }
 
     private Customer checkCustomerExistence(String email) throws CustomerNotFoundException {
         Customer customer = customerEntityService.findCustomer(email);
-
         if (customer == null) {
-            throw new CustomerNotFoundException("This email does not exist.");
+            throw new CustomerNotFoundException("Email or password is incorrect.");
         }
-
         return customer;
     }
 
@@ -56,7 +50,6 @@ public class CustomerRestService {
         if (comparePassword(customer, password)) {
             return;
         }
-
         throw new InvalidPasswordException("Email or password is incorrect.");
     }
 

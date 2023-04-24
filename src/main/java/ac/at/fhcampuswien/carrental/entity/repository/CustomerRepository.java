@@ -8,18 +8,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-/*
-    Customer findByeMail(String eMail);
-
-    boolean existsByeMail(String eMail);*/
-
     boolean existsByeMail(String email);
 
     Customer findByeMail(String email);
 
     @Query(value = "SELECT c.id FROM customers c WHERE c.e_mail = :email", nativeQuery = true)
     Long findIdByeMailIgnoreCase(@Param("email") String email);
-
 }
 
 

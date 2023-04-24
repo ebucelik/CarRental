@@ -9,7 +9,7 @@
 package ac.at.fhcampuswien.carrental.wsdl;
 
 
-
+import lombok.AllArgsConstructor;
 
 /**
  * <p>Java-Klasse für getCurrencyCodes complex type.

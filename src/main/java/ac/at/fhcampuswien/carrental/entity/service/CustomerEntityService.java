@@ -14,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CustomerEntityService {
@@ -28,14 +27,14 @@ public class CustomerEntityService {
         }
     }
 
-    public Customer findCustomer(String email){
+    public Customer findCustomer(String email) {
         return customerRepository.findByeMail(email);
     }
 
-    public RegistrationResponseDto addCustomer(RegistrationRequestDto customerDto) throws CustomerAlreadyExistsException {
-        checkCustomerExistence(customerDto.getEMail());
+    public RegistrationResponseDto addCustomer(RegistrationRequestDto registrationRequestDto) throws CustomerAlreadyExistsException {
+        checkCustomerExistence(registrationRequestDto.getEMail());
 
-        Customer customer = userMapper.requestMapping(customerDto);
+        Customer customer = userMapper.requestMapping(registrationRequestDto);
         Customer dbResponse = customerRepository.save(customer);
 
         return userMapper.responseMapping(dbResponse);

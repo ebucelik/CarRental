@@ -61,7 +61,6 @@ public class JwtService {
         if (extractExpiration(token).before(new Date())) {
             throw new InvalidTokenException("Token is expired.");
         }
-
         validateToken(token);
     }
 
@@ -82,14 +81,14 @@ public class JwtService {
         int expirationTimeInMillis = 0;
 
         switch(token) {
-            case AccessToken -> expirationTimeInMillis = 60 * 60;
-            case RefreshToken -> expirationTimeInMillis = 60 * 60 * 24;
+            case AccessToken -> expirationTimeInMillis = 60 * 5; // 5 Minuten
+            case RefreshToken -> expirationTimeInMillis = 60 * 60 * 24; // 1 Tag
         }
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userEmail)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expirationTimeInMillis)) //token valid for 30 Minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expirationTimeInMillis))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

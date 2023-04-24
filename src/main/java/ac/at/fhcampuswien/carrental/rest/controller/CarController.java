@@ -2,6 +2,9 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotFoundException;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.InvalidTokenException;
 import ac.at.fhcampuswien.carrental.rest.models.CarListDTO;
 import ac.at.fhcampuswien.carrental.rest.services.CarRestService;
@@ -36,20 +39,36 @@ public class CarController {
     @Autowired
     private CarRestService carRestService;
 
-    @GetMapping("/availableCars")
+    @GetMapping()
     @Operation(
             summary = "Lists all available cars.",
             tags = {"Cars"},
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
-                    @ApiResponse(description = "Cars not found", responseCode = "404", content = @Content)
+                    @ApiResponse(description = "No cars available in this time period", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
     public ResponseEntity<List<CarListDTO>> listAvailableCars(@Valid @RequestHeader(value = "Auth") String token,
                                                               @RequestParam("currentCurrency") String currentCurrency,
                                                               @RequestParam("chosenCurrency") String chosenCurrency,
                                                               @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                                              @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) throws Exception {
+                                                              @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) throws CarNotAvailableException, CurrencyServiceNotAvailableException {
         List<CarListDTO> allAvailableCars = carRestService.getAvailableCars(currentCurrency, chosenCurrency, from, to);
         return new ResponseEntity<>(allAvailableCars, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Lists specific car.",
+            tags = {"Cars"},
+            responses = {
+                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
+                    @ApiResponse(description = "The Car with this ID could not be found!", responseCode = "404", content = @Content)
+            })
+    public ResponseEntity<Car> getCar(@Valid @RequestHeader(value = "Auth") String token,
+                                                              @PathVariable("id") long carId) throws CarNotFoundException {
+        Car specificCar = carRestService.getSpecificCar(carId);
+        return new ResponseEntity<>(specificCar, HttpStatus.OK);
+    }
+
 }

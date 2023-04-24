@@ -22,23 +22,19 @@ import java.util.List;
 
 @Repository
 public interface RentalRepository extends JpaRepository<Rental, Long> {
-    @Query(value = "SELECT r.car_id FROM rentals r WHERE NOT (r.start_day >= :startDate AND r.end_day <= :endDate OR r.start_day <= :startDate AND r.end_day >= :endDate OR r.start_day <= :endDate AND r.end_day >= :endDate OR r.start_day <= :startDate AND r.end_day >= :startDate)", nativeQuery = true)
+    @Query(value = "SELECT r.car_id FROM rentals r WHERE (r.start_day >= :startDate AND r.end_day <= :endDate OR r.start_day <= :startDate AND r.end_day >= :endDate OR r.start_day <= :endDate AND r.end_day >= :endDate OR r.start_day <= :startDate AND r.end_day >= :startDate)", nativeQuery = true)
     List<Long> findAllAvailableCarsBetweenDates(
             @Param("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @Param("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate);
 
-    //    @Query(value = "SELECT c.* FROM cars c WHERE c.id NOT IN (SELECT r.car_id FROM rentals r WHERE NOT (r.start_day >= :startDate AND r.end_day <= :endDate OR r.start_day <= :startDate AND r.end_day >= :endDate OR r.start_day <= :endDate AND r.end_day >= :endDate OR r.start_day <= :startDate AND r.end_day >= :startDate))", nativeQuery = true)
-
-
 
     @Query(value = "UPDATE rentals r SET car_id = :carId, start_day = :newStartDay, end_day = :newEndDay, total_cost = :newTotalCost WHERE r.id = :newId RETURNING *", nativeQuery = true)
-    Rental updateRental (
+    Rental updateRental(
             @Param("carId") Long carId,
             @Param("newStartDay") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @Param("newEndDay") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @Param("newTotalCost") float totalCost,
             @Param("newId") Long rentalId
     );
-
 
     List<Rental> findByCustomerId(long id);
 

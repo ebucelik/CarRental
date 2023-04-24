@@ -29,49 +29,4 @@ public class UserMapper {
                 .eMail(customer.getEMail())
                 .build();
     }
-
-    public Rental BookingRequestToRental(RentalRequestDto rentalBooking, Long id){
-        return Rental.builder()
-                .customerId(id)
-                .carId(rentalBooking.getCarId())
-                .startDay(rentalBooking.getStartDay())
-                .endDay(rentalBooking.getEndDay())
-                .totalCost(rentalBooking.getTotalCost())
-                .build();
-    }
-
-    public RentalResponseDto RentalToBookingResponse(Rental rental, String eMail){
-        return RentalResponseDto.builder()
-                .eMail(eMail)
-                .carId(rental.getCarId())
-                .startDay(rental.getStartDay())
-                .endDay(rental.getEndDay())
-                .totalCost(rental.getTotalCost())
-                .build();
-    }
-
-
-    public RentalUpdateResponseDto RentalToUpdateResponse(Rental rentalUpdate) {
-        return RentalUpdateResponseDto.builder()
-                .id(rentalUpdate.getId())
-                .carId(rentalUpdate.getCarId())
-                .startDay(rentalUpdate.getStartDay())
-                .endDay(rentalUpdate.getEndDay())
-                .totalCost(rentalUpdate.getTotalCost())
-                .build();
-    }
-
-    public CarListDTO carToDisplayList(Car car, float dailyCostConverted, float totalCost){
-        return CarListDTO.builder()
-                .id(car.getId())
-                .dailyCost(dailyCostConverted)
-                .brand(car.getBrand())
-                .model(car.getModel())
-                .hp(car.getHp())
-                .buildDate(car.getBuildDate())
-                .fuelType(car.getFuelType())
-                .imageLink(car.getImageLink())
-                .totalCosts(totalCost)
-                .build();
-    }
 }

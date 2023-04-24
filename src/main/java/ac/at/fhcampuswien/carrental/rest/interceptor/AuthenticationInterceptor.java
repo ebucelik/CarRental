@@ -18,7 +18,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Adding .excludePathPatterns in AppConfig didn't work therefore this workaround.
-        if (request.getRequestURL().toString().contains("users") || request.getRequestURL().toString().contains("swagger-ui") || request.getRequestURL().toString().contains("v3")) {
+        if (request.getRequestURL().toString().contains("customers") || request.getRequestURL().toString().contains("swagger-ui") || request.getRequestURL().toString().contains("v3")) {
             return true;
         }
 

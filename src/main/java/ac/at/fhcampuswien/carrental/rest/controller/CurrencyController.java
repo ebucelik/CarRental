@@ -2,6 +2,7 @@ package ac.at.fhcampuswien.carrental.rest.controller;
 
 import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.models.Currency;
+import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
 import ac.at.fhcampuswien.carrental.rest.models.CurrencyResponseDto;
 import ac.at.fhcampuswien.carrental.rest.services.CurrencySOAPService;
 import ac.at.fhcampuswien.carrental.wsdl.GetCurrencyCodes;
@@ -40,15 +41,14 @@ public class CurrencyController {
             summary = "Lists all currency codes.",
             tags = {"Currency"},
             responses = {
-                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Currency.class)))
+                    @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Currency.class))),
+                    @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
-    public ResponseEntity<CurrencyResponseDto> getAllCurrencies() throws Exception {
+    public ResponseEntity<CurrencyResponseDto> getAllCurrencies(@Valid @RequestHeader(value = "Auth") String token) throws CurrencyServiceNotAvailableException {
         GetCurrencyCodes getCurrencyCodes = new GetCurrencyCodes();
         List<String> currencyCodes = currencySOAPService.getCurrencyCodes(getCurrencyCodes);
-
         CurrencyResponseDto currencyResponseDto = new CurrencyResponseDto();
         currencyResponseDto.setCurrencyCodes(currencyCodes);
-
         return ResponseEntity.ok(currencyResponseDto);
     }
 }
