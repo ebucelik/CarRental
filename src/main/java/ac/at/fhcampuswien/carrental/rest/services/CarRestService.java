@@ -69,6 +69,10 @@ public class CarRestService {
         GetConvertedValue getConvertedValue = new GetConvertedValue(1f, currentCurrency, chosenCurrency);
         return currencySOAPService.getConvertedValue(getConvertedValue);
     }
+
+    public List<Car> getCarsByIds(List<Long> ids) {
+        return carEntityService.getCarsByIds(ids);
+    }
 }
 
 

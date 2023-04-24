@@ -1,17 +1,15 @@
 package ac.at.fhcampuswien.carrental.rest.controller;
 
 
+import ac.at.fhcampuswien.carrental.entity.models.Car;
 import ac.at.fhcampuswien.carrental.entity.models.Rental;
 import ac.at.fhcampuswien.carrental.exception.exceptions.BookingNotFoundException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CarNotAvailableException;
 import ac.at.fhcampuswien.carrental.exception.exceptions.CurrencyServiceNotAvailableException;
+import ac.at.fhcampuswien.carrental.rest.models.*;
 import ac.at.fhcampuswien.carrental.rest.services.JwtService;
 import ac.at.fhcampuswien.carrental.entity.service.RentalEntityService;
 import ac.at.fhcampuswien.carrental.exception.exceptions.BookingFailedException;
-import ac.at.fhcampuswien.carrental.rest.models.RentalRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.RentalResponseDto;
-import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateRequestDto;
-import ac.at.fhcampuswien.carrental.rest.models.RentalUpdateResponseDto;
 import ac.at.fhcampuswien.carrental.rest.services.CarRestService;
 import ac.at.fhcampuswien.carrental.rest.services.RentalRestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -44,6 +44,9 @@ public class RentalController {
     @NotNull
     RentalRestService rentalRestService;
 
+    @Autowired
+    CarRestService carRestService;
+
     @GetMapping("/allBookings")
     @Operation(
             summary = "Lists all bookings.",
@@ -52,11 +55,31 @@ public class RentalController {
                     @ApiResponse(description = "OK", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))),
                     @ApiResponse(description = "Currency Service is not available!", responseCode = "500", content = @Content)
             })
-    public ResponseEntity<List<Rental>> getBookings(@Valid @RequestHeader(value = "Auth") String token,
-                                                    @RequestParam String currentCurrency,
-                                                    HttpServletRequest request) throws CurrencyServiceNotAvailableException {
+    public ResponseEntity<List<RentalResponseDtoWithCar>> getBookings(@Valid @RequestHeader(value = "Auth") String token,
+                                                                      @RequestParam String currentCurrency,
+                                                                      HttpServletRequest request) throws CurrencyServiceNotAvailableException {
         List<Rental> rentals = rentalRestService.getAllBookings(request, currentCurrency);
-        return new ResponseEntity<>(rentals, HttpStatus.OK);
+        List<Long> carIds = rentals.stream().map(Rental::getCarId).toList();
+        List<Car> cars = carRestService.getCarsByIds(carIds);
+        List<RentalResponseDtoWithCar> rentalResponseDtosWithCar = rentals.stream().map(rental -> {
+            Car car = cars.stream().filter(filteredCar -> {
+                return Objects.equals(filteredCar.getId(), rental.getCarId());
+            })
+                    .findFirst().orElseThrow();
+
+            return RentalResponseDtoWithCar
+                    .builder()
+                    .id(rental.getId())
+                    .customerId(rental.getCustomerId())
+                    .car(car)
+                    .startDay(rental.getStartDay())
+                    .endDay(rental.getEndDay())
+                    .totalCost(rental.getTotalCost())
+                    .build();
+        })
+                .toList();
+
+        return new ResponseEntity<>(rentalResponseDtosWithCar, HttpStatus.OK);
     }
 
     @PostMapping("/booking")

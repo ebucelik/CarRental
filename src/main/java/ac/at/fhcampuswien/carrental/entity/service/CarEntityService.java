@@ -42,5 +42,7 @@ public class CarEntityService {
         return car;
     }
 
-
+    public List<Car> getCarsByIds(List<Long> ids) {
+        return carRepository.findCarsByIds(ids);
+    }
 }
