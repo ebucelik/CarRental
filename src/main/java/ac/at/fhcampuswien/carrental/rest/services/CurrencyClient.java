@@ -38,7 +38,7 @@ public class CurrencyClient {
 
     private WebServiceTemplate template;
 
-    private final String URI = "http://54.93.118.155:8501";
+    private final String URI = "http://3.76.252.92:8501";
 
     private final String basicAuth = "Basic 1101bf5c602959307750538c2f57b5d359b5eb66ed13623b814aafead8038ebf";
 
